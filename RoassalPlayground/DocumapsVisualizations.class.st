@@ -55,8 +55,15 @@ DocumapsVisualizations >> documaps [
 
 { #category : #examples }
 DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
-	<gtExample>
-	| v shape cleanDownBlock addBlock boxCtor labelCtor mouseClickHandlerForShrink rootElement |
+	^ self
+		expandeableTreeViewFor: rootObject
+		using: attrGetter
+		uptoDepth: 3
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter uptoDepth: depth [
+	| v shape cleanDownBlock addBlock boxCtor labelCtor mouseClickHandlerForShrink rootElement depthRec |
 	"Ctor for elements to be rendered as box shapes"
 	boxCtor := [ RTRoundedBox new
 		borderRadius: 5;
@@ -80,7 +87,15 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
 	rootElement := shape elementOn: rootObject.
 	mouseClickHandlerForShrink value: rootElement.
 	v add: rootElement.
-	rootElement announce: TRMouseLeftClick new.
+	depthRec := nil.
+	depthRec := [ :d :elements | 
+	d > 0
+		ifTrue: [ elements
+				do: [ :each | 
+					each announce: TRMouseLeftClick new.
+					depthRec value: d - 1 value: (each outgoingEdges collect: #to) ]  ] ].
+	"rootElement announce: TRMouseLeftClick new."
+	depthRec value: depth value: {rootElement}.
 	v animations
 		do: [ :each | each after: [ v canvas camera focusOnCenterScaled ] ].
 	^ v

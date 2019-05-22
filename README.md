@@ -12,5 +12,5 @@ This repository can be cloned and loaded with `Iceberg` and it contains the pack
   - it supports the recursive expansion on dynamically added nodes;
   - it uses few interactions such as transitions and pretty node shapes using padding.
   
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/expandeable-filetree.png).
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/expandeable-filetree.png)
 

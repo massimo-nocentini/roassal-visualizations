@@ -82,7 +82,7 @@ MiscVisualizations >> fibonacci [
 		using: [ :n | 
 			n < 11
 				ifTrue: [ Array with: n + 1 with: n + 2 ]
-				ifFalse: [ "up to the first 10 Fibonacci numbers" #() ] ].
+				ifFalse: [ "up to the first 10 Fibonacci numbers" Array new ] ].
 	b build.
 	^ b view
 ]

@@ -8,39 +8,35 @@ Class {
 }
 
 { #category : #examples }
-DocumapsVisualizations >> addBlockForView: v withShapeBuilder: shape withGetter: attrGetter [
-	| block line |
-	line := RTShapeBuilder new orthoHorizontalLine.
-	block := [ :element :mouseClickHandler | 
+DocumapsVisualizations >> addElement: element withGetter: attrGetter [
 	| newElements children |
 	children := attrGetter value: element model.
-	newElements := shape elementsOn: children.
+	newElements := element shape elementsOn: children.
 	newElements @ RTDraggableChildren.
 	newElements
-		collect: [ :child | 
+		do: [ :child | 
 			child translateTo: element trachelShape position.
 			child parentElement: element.
-			mouseClickHandler value: child.
-			v add: child.
-			v add: (line edgeFrom: element to: child).
-			child ] ].
-	^ block
+			self
+				registerMouseClickHandlerForElement: child
+				withGetter: attrGetter.
+			element view
+				add: child;
+				add: (RTShapeBuilder new orthoHorizontalLine edgeFrom: element to: child) ].
+	"element view signalUpdate."
+	^ newElements
 ]
 
 { #category : #examples }
-DocumapsVisualizations >> cleanDownBlockForView: v [
-	| block |
-	block := nil.	"to quiet the compiler and to prepare for recursion"
-	block := [ :element | 
+DocumapsVisualizations >> cleanDownForElement: element [ 
 	element outgoingEdges
 		do: [ :edge | 
 			| child |
 			child := edge to.
-			block value: child.
-			v removeElement: child.
-			v removeEdge: edge .
-			child] ].
-	^ block
+			self cleanDownForElement: child.
+			element view
+				removeElement: child;
+				removeEdge: edge ]
 ]
 
 { #category : #examples }
@@ -58,70 +54,74 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
 	^ self
 		expandeableTreeViewFor: rootObject
 		using: attrGetter
-		uptoDepth: 1
+		uptoDepth: 3
 ]
 
 { #category : #examples }
 DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter uptoDepth: depth [
-	| v shape cleanDownBlock addBlock boxCtor labelCtor mouseClickHandlerForShrink rootElement depthRec |
-	"Ctor for elements to be rendered as box shapes"
+	| v shape rootElement |
+	shape := self shapeBuilder.
+	v := RTView new.	
+	v @ RTDraggableView.	
+	rootElement := shape elementOn: rootObject.
+	v add: rootElement.
+	self
+		registerMouseClickHandlerForElement: rootElement
+		withGetter: attrGetter.
+	self
+		exploreElements: {rootElement}
+		atDepth: depth
+		withGetter: attrGetter.
+	self layout on: v elements.
+	v canvas focusOnCenterScaled.
+	^ v
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> exploreElements: elements atDepth: d withGetter: attrGetter [
+	d > 0
+		ifTrue: [ elements
+				do: [ :each | 
+					self addElement: each withGetter: attrGetter;
+					
+						exploreElements: (each outgoingEdges collect: #to)
+						atDepth: d - 1
+						withGetter: attrGetter ] ]
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> layout [ 
+|translator|
+translator := RTSmoothLayoutTranslator new
+		nbCycles: 0.2;
+		"in seconds"
+			yourself.
+	^RTHorizontalTreeLayout new
+		translator: translator;
+		yourself.
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGetter: attrGetter [
+	element
+		when: TRMouseLeftClick
+		do: [ :ev | 
+			ev shiftKeyPressed
+				ifTrue: [ self cleanDownForElement: ev shape element ]
+				ifFalse: [ self addElement: ev shape element withGetter: attrGetter ].
+			self layout on: element view elements ].
+	^ element
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> shapeBuilder [
+	|boxCtor labelCtor|
 	boxCtor := [ RTRoundedBox new
 		borderRadius: 5;
 		borderColor: Color black;
 		borderWidth: 0.5;
 		yourself ].
-	"Joint ctor for attaching a label within each box shape"
+	
 	labelCtor := [ RTLabel text: [ :path | path pathSegments last ] ].
-	v := RTView new.	"The main view"
-	v @ RTDraggableView.	"set some interactions"
-	shape := (boxCtor value + labelCtor value) allOfSameSizeWithPadding.
-	cleanDownBlock := self cleanDownBlockForView: v.
-	addBlock := self
-		addBlockForView: v
-		withShapeBuilder: shape
-		withGetter: attrGetter.
-	mouseClickHandlerForShrink := self
-		mouseClickHandleBlockForView: v
-		withCleanDownBlock: cleanDownBlock
-		withAddBlock: addBlock.
-	rootElement := shape elementOn: rootObject.
-	mouseClickHandlerForShrink value: rootElement.
-	v add: rootElement.
-	depthRec := nil.
-	depthRec := [ :d :elements | 
-	d > 0
-		ifTrue: [ elements
-				do: [ :each | 
-					each announce: TRMouseLeftClick new.	"extract and call method directly"
-					depthRec value: d - 1 value: (each outgoingEdges collect: #to) ] ] ].
-	"rootElement announce: TRMouseLeftClick new."
-	depthRec value: depth value: {rootElement}.
-	v animations
-		do: [ :each | each after: [ v canvas camera focusOnCenterScaled ] ].
-	^ v "within block forward messages to self"
-]
-
-{ #category : #examples }
-DocumapsVisualizations >> mouseClickHandleBlockForView: v withCleanDownBlock: cleanDownBlock withAddBlock: addBlock [
-	| block translator layout |
-	translator := RTSmoothLayoutTranslator new
-		nbCycles: 0.2;
-		"in seconds"
-			yourself.
-	layout := RTHorizontalTreeLayout new
-		translator: translator;
-		yourself.
-	block := nil.
-	block := [ :element | 
-	element
-		when: TRMouseLeftClick
-			do: [ :ev | 
-			ev shiftKeyPressed
-				ifTrue: [ cleanDownBlock value: ev shape element ]
-				ifFalse: [ addBlock value: ev shape element value: block ].
-			layout on: v elements.
-			"v canvas camera focusOnCenter."
-			v signalUpdate "avoid to update the view each time" ];
-		yourself ].
-	^ block
+	^(boxCtor value + labelCtor value) allOfSameSizeWithPadding.
 ]

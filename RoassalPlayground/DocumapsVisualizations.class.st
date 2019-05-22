@@ -58,7 +58,7 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
 	^ self
 		expandeableTreeViewFor: rootObject
 		using: attrGetter
-		uptoDepth: 3
+		uptoDepth: 1
 ]
 
 { #category : #examples }
@@ -92,13 +92,13 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter u
 	d > 0
 		ifTrue: [ elements
 				do: [ :each | 
-					each announce: TRMouseLeftClick new.
-					depthRec value: d - 1 value: (each outgoingEdges collect: #to) ]  ] ].
+					each announce: TRMouseLeftClick new.	"extract and call method directly"
+					depthRec value: d - 1 value: (each outgoingEdges collect: #to) ] ] ].
 	"rootElement announce: TRMouseLeftClick new."
 	depthRec value: depth value: {rootElement}.
 	v animations
 		do: [ :each | each after: [ v canvas camera focusOnCenterScaled ] ].
-	^ v
+	^ v "within block forward messages to self"
 ]
 
 { #category : #examples }
@@ -121,7 +121,7 @@ DocumapsVisualizations >> mouseClickHandleBlockForView: v withCleanDownBlock: cl
 				ifFalse: [ addBlock value: ev shape element value: block ].
 			layout on: v elements.
 			"v canvas camera focusOnCenter."
-			v signalUpdate ];
+			v signalUpdate "avoid to update the view each time" ];
 		yourself ].
 	^ block
 ]

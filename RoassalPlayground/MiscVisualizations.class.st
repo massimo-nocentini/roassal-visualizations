@@ -65,6 +65,52 @@ MiscVisualizations >> dynamicalView [
 	^ v
 ]
 
+{ #category : #examples }
+MiscVisualizations >> fibonacci [
+	<gtExample>
+	| b p |
+	p := RTPalette c6.
+	b := RTCircularTreeMapBuilder new.
+	b shape
+		if: [ :aPoint | aPoint fibonacci odd ] fillColor: [ p first ];
+		if: [ :aPoint | aPoint fibonacci even ] fillColor: [ p second ].
+	b
+		baseradius: 400;
+		weight: [ :aPoint | aPoint fibonacci + 1 ].
+	b
+		explore: 0
+		using: [ :n | 
+			n < 11
+				ifTrue: [ Array with: n + 1 with: n + 2 ]
+				ifFalse: [ "up to the first 10 Fibonacci numbers" #() ] ].
+	b build.
+	^ b view
+]
+
+{ #category : #examples }
+MiscVisualizations >> pascal [
+	<gtExample>
+	| b p |
+	p := RTPalette c6.
+	b := RTCircularTreeMapBuilder new.
+	b shape
+		if: [ :aPoint | aPoint  binomial odd ]
+			fillColor: [ p first ];
+		if: [ :aPoint | aPoint  binomial even ]
+			fillColor: [ p second ].
+	b
+		baseradius: 400;
+		weight: [ :aPoint | aPoint binomial ].
+	b
+		explore: 0 @ 0
+		using: [ :n | 
+			n < (8 @ 8)
+				ifTrue: [ Array with: n + (1 @ 0) with: n + (1 @ 1) ]
+				ifFalse: [ #() ] ].
+	b build.
+	^ b view
+]
+
 { #category : #'public translation' }
 MiscVisualizations >> smoothTranslation [
 	<gtExample>

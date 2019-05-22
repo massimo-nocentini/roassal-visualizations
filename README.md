@@ -11,4 +11,6 @@ This repository can be cloned and loaded with `Iceberg` and it contains the pack
   - it expands the tree according to a desired depth although for deep level the viz is quite slow. I lack some details on the rendering process, in particular I use for now a hack to center the camera for the initial view that can be surely improved;
   - it supports the recursive expansion on dynamically added nodes;
   - it uses few interactions such as transitions and pretty node shapes using padding.
+  
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/expandeable-filetree.png).
 

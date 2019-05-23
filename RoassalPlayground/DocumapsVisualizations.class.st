@@ -10,6 +10,8 @@ Class {
 { #category : #examples }
 DocumapsVisualizations >> addElement: element withGetter: attrGetter [
 	| newElements children |
+	element model folded
+		ifFalse: [ ^ element ].
 	children := attrGetter value: element model.
 	newElements := element shape elementsOn: children.
 	newElements @ RTDraggableChildren.
@@ -23,20 +25,22 @@ DocumapsVisualizations >> addElement: element withGetter: attrGetter [
 			element view
 				add: child;
 				add: (RTShapeBuilder new orthoHorizontalLine edgeFrom: element to: child) ].
-	"element view signalUpdate."
+	element model folded: false.
 	^ newElements
 ]
 
 { #category : #examples }
-DocumapsVisualizations >> cleanDownForElement: element [ 
+DocumapsVisualizations >> cleanDownForElement: element [
 	element outgoingEdges
-		do: [ :edge | 
+		do:
+			[ :edge | 
 			| child |
 			child := edge to.
 			self cleanDownForElement: child.
 			element view
 				removeElement: child;
-				removeEdge: edge ]
+				removeEdge: edge ]. element model
+		folded: true
 ]
 
 { #category : #examples }
@@ -51,9 +55,15 @@ DocumapsVisualizations >> documaps [
 
 { #category : #examples }
 DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
+	| ctor |
+	ctor := [ :v | 
+	FoldableDecoration new
+		obj: v;
+		folded: true;
+		yourself ].
 	^ self
-		expandeableTreeViewFor: rootObject
-		using: attrGetter
+		expandeableTreeViewFor: (ctor value: rootObject)
+		using: [ :each | (attrGetter value: each obj) collect: ctor ]
 		uptoDepth: 3
 ]
 
@@ -73,7 +83,7 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter u
 		atDepth: depth
 		withGetter: attrGetter.
 	self layout on: v elements.
-	v canvas camera focusOnCenter.
+	"v canvas camera focusOnCenter."
 	^ v
 ]
 
@@ -118,12 +128,12 @@ DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGette
 
 { #category : #examples }
 DocumapsVisualizations >> shapeBuilder [
-	| box label  |
+	| box label |
 	box := RTRoundedBox new
 		borderRadius: 5;
 		borderColor: Color black;
 		borderWidth: 0.5;
 		yourself.
-	label := RTLabel text: [ :path | path pathSegments last ].
+	label := RTLabel text: [ :path | path  obj pathSegments last ].
 	^ (box + label) allOfSameSizeWithPadding
 ]

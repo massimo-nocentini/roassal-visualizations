@@ -61,8 +61,8 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
 DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter uptoDepth: depth [
 	| v shape rootElement |
 	shape := self shapeBuilder.
-	v := RTView new.	
-	v @ RTDraggableView.	
+	v := RTView new.
+	v @ RTDraggableView.
 	rootElement := shape elementOn: rootObject.
 	v add: rootElement.
 	self
@@ -73,7 +73,7 @@ DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter u
 		atDepth: depth
 		withGetter: attrGetter.
 	self layout on: v elements.
-	v canvas focusOnCenterScaled.
+	v canvas camera focusOnCenter.
 	^ v
 ]
 
@@ -90,38 +90,40 @@ DocumapsVisualizations >> exploreElements: elements atDepth: d withGetter: attrG
 ]
 
 { #category : #examples }
-DocumapsVisualizations >> layout [ 
-|translator|
-translator := RTSmoothLayoutTranslator new
-		nbCycles: 0.2;
-		"in seconds"
-			yourself.
-	^RTHorizontalTreeLayout new
-		translator: translator;
-		yourself.
+DocumapsVisualizations >> layout [
+	
+	^ RTHorizontalTreeLayout new
+	
 ]
 
 { #category : #examples }
 DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGetter: attrGetter [
+	| layout |
+	layout := self layout
+		translator:
+			(RTSmoothLayoutTranslator new
+				nbCycles: 0.2;
+				"in seconds"
+					yourself);
+		yourself.	"add translator to beautify the viz"
 	element
 		when: TRMouseLeftClick
 		do: [ :ev | 
 			ev shiftKeyPressed
-				ifTrue: [ self cleanDownForElement: ev shape element ]
-				ifFalse: [ self addElement: ev shape element withGetter: attrGetter ].
-			self layout on: element view elements ].
+				ifTrue: [ self cleanDownForElement: element ]
+				ifFalse: [ self addElement: element withGetter: attrGetter ].
+			layout on: element view elements .element view signalUpdate ].
 	^ element
 ]
 
 { #category : #examples }
 DocumapsVisualizations >> shapeBuilder [
-	|boxCtor labelCtor|
-	boxCtor := [ RTRoundedBox new
+	| box label  |
+	box := RTRoundedBox new
 		borderRadius: 5;
 		borderColor: Color black;
 		borderWidth: 0.5;
-		yourself ].
-	
-	labelCtor := [ RTLabel text: [ :path | path pathSegments last ] ].
-	^(boxCtor value + labelCtor value) allOfSameSizeWithPadding.
+		yourself.
+	label := RTLabel text: [ :path | path pathSegments last ].
+	^ (box + label) allOfSameSizeWithPadding
 ]

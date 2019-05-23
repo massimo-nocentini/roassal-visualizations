@@ -200,6 +200,28 @@ MiscVisualizations >> smoothTranslation [
 ]
 
 { #category : #examples }
+MiscVisualizations >> stirlingII [
+	<gtExample>
+	| b p |
+	p := RTPalette c6.
+	b := RTCircularTreeMapBuilder new.
+	b shape
+		if: [ :aPoint | aPoint stirlingII odd ] fillColor: [ p first ];
+		if: [ :aPoint | aPoint stirlingII even ] fillColor: [ p second ].
+	b
+		baseradius: 400;
+		weight: #stirlingII .
+	b
+		explore: 0 @ 0
+		using: [ :n | 
+			n < (8 @ 8)
+				ifTrue: [ Array with: n + (1 @ 0) with: n + (1 @ 1) ]
+				ifFalse: [ #() ] ].
+	b build.
+	^ b view
+]
+
+{ #category : #examples }
 MiscVisualizations >> temp [
 	<gtExample>
 	| b |

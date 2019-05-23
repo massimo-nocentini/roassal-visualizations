@@ -25,6 +25,28 @@ MiscVisualizations >> bezierTest [
 ]
 
 { #category : #examples }
+MiscVisualizations >> catalan [
+	<gtExample>
+	| b p |
+	p := RTPalette c6.
+	b := RTCircularTreeMapBuilder new.
+	b shape
+		if: [ :aPoint | aPoint catalan odd ] fillColor: [ p first ];
+		if: [ :aPoint | aPoint catalan even ] fillColor: [ p second ].
+	b
+		baseradius: 400;
+		weight: [ :aPoint | aPoint catalan ].
+	b
+		explore: 0 @ 0
+		using: [ :n | 
+			n < (6 @ 6)
+				ifTrue: [ (0 to: n y + 1) collect: [ :y | (n x + 1) @ y ] ]
+				ifFalse: [ #() ] ].
+	b build.
+	^ b view
+]
+
+{ #category : #examples }
 MiscVisualizations >> dynamicalView [
 	<gtExample>
 	| v stepping |

@@ -14,3 +14,13 @@ This repository can be cloned and loaded with `Iceberg` and it contains the pack
   
 ![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/expandeable-filetree.png)
 
+A visualization of the sequence of Fibonacci numbers:
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fibonacci.svg)
+
+A visualization of the sequence of the Pascal triangle:
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/pascal.svg)
+
+A visualization of the sequence of the Catalan numbers:
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/catalan.svg)
+
+

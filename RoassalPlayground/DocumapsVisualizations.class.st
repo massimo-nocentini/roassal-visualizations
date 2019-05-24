@@ -21,11 +21,11 @@ DocumapsVisualizations >> cleanDownForElement: element [
 			| child |
 			child := edge to.
 			self cleanDownForElement: child.
+			child translateTo: child parentElement trachelShape position.
 			element view
 				removeElement: child;
 				removeEdge: edge ].
-		
-	element   folded: true
+	element folded: true
 ]
 
 { #category : #examples }
@@ -91,24 +91,29 @@ DocumapsVisualizations >> layout [
 ]
 
 { #category : #examples }
-DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGetter: attrGetter [
+DocumapsVisualizations >> mouseLeftClickHandlerForEvent: ev withGetter: attrGetter [
 	| layout |
 	layout := self layout
 		translator:
 			(RTSmoothLayoutTranslator new
-				nbCycles: 0.2;
+				nbCycles: 0.3;
 				"in seconds"
 					yourself);
-		yourself.	"add translator to beautify the viz"
+		yourself.
+	ev shiftKeyPressed
+		ifTrue: [ self cleanDownForElement: ev element ]
+		ifFalse: [ self addElement: ev element withGetter: attrGetter ].
+	layout on: ev element view elements.
+	ev element view signalUpdate
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGetter: attrGetter [
 	element
 		when: TRMouseLeftClick
-		do: [ :ev | 
-			ev shiftKeyPressed
-				ifTrue: [ self cleanDownForElement: element ]
-				ifFalse: [ self addElement: element withGetter: attrGetter ].
-			layout on: element view elements.
-			element view signalUpdate ].
-	^ element
+		do:
+			[ :ev | self mouseLeftClickHandlerForEvent: ev withGetter: attrGetter ].
+	
 ]
 
 { #category : #examples }

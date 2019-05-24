@@ -16,17 +16,20 @@ This repository can be cloned and loaded with `Iceberg` and it contains the pack
   - it supports the recursive expansion on dynamically added nodes;
   - it uses few interactions such as transitions and pretty node shapes using padding.
   
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/expandeable-filetree.png)
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/filetree.svg)
 
 ## Combinatorial visualizations
 
-### Parity of Fibonacci numbers
+### Parity of Fibonacci numbers [A000045](https://oeis.org/A000045)
 ![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fibonacci.svg)
 
-### Parity of the Pascal triangle
+### Parity of the Pascal triangle [A007318](https://oeis.org/A007318)
 ![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/pascal.svg)
 
-### Parity of the Catalan triangle
+### Parity of the Catalan triangle [A009766](https://oeis.org/A009766)
 ![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/catalan.svg)
+
+### Parity of the Stirling (II kind) triangle [A008277](https://oeis.org/A008277)
+![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/stirlingII.svg)
 
 

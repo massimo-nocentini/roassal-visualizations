@@ -21,10 +21,10 @@ DocumapsVisualizations >> cleanDownForElement: element [
 			| child |
 			child := edge to.
 			self cleanDownForElement: child.
-			child translateTo: child parentElement trachelShape position.
 			element view
 				removeElement: child;
-				removeEdge: edge ].
+				removeEdge: edge.
+			 ].
 	element folded: true
 ]
 

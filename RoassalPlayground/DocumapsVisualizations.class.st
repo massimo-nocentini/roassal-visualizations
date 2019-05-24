@@ -9,38 +9,23 @@ Class {
 
 { #category : #examples }
 DocumapsVisualizations >> addElement: element withGetter: attrGetter [
-	| newElements children |
-	element model folded
-		ifFalse: [ ^ element ].
-	children := attrGetter value: element model.
-	newElements := element shape elementsOn: children.
-	newElements @ RTDraggableChildren.
-	newElements
-		do: [ :child | 
-			child translateTo: element trachelShape position.
-			child parentElement: element.
-			self
-				registerMouseClickHandlerForElement: child
-				withGetter: attrGetter.
-			element view
-				add: child;
-				add: (RTShapeBuilder new orthoHorizontalLine edgeFrom: element to: child) ].
-	element model folded: false.
-	^ newElements
+	^ element folded
+		ifTrue: [ self unfoldElement: element withGetter: attrGetter ]
+		ifFalse: [ element childrenElements  ]
 ]
 
 { #category : #examples }
 DocumapsVisualizations >> cleanDownForElement: element [
 	element outgoingEdges
-		do:
-			[ :edge | 
+		do: [ :edge | 
 			| child |
 			child := edge to.
 			self cleanDownForElement: child.
 			element view
 				removeElement: child;
-				removeEdge: edge ]. element model
-		folded: true
+				removeEdge: edge ].
+		
+	element   folded: true
 ]
 
 { #category : #examples }
@@ -54,17 +39,16 @@ DocumapsVisualizations >> documaps [
 ]
 
 { #category : #examples }
+DocumapsVisualizations >> edgeBuilder [
+ ^ RTShapeBuilder new orthoHorizontalLine
+]
+
+{ #category : #examples }
 DocumapsVisualizations >> expandeableTreeViewFor: rootObject using: attrGetter [
-	| ctor |
-	ctor := [ :v | 
-	FoldableDecoration new
-		obj: v;
-		folded: true;
-		yourself ].
 	^ self
-		expandeableTreeViewFor: (ctor value: rootObject)
-		using: [ :each | (attrGetter value: each obj) collect: ctor ]
-		uptoDepth: 3
+		expandeableTreeViewFor: rootObject
+		using: attrGetter
+		uptoDepth: 2
 ]
 
 { #category : #examples }
@@ -92,11 +76,11 @@ DocumapsVisualizations >> exploreElements: elements atDepth: d withGetter: attrG
 	d > 0
 		ifTrue: [ elements
 				do: [ :each | 
-					self addElement: each withGetter: attrGetter;
-					
-						exploreElements: (each outgoingEdges collect: #to)
-						atDepth: d - 1
-						withGetter: attrGetter ] ]
+					self
+						addElement: each withGetter: attrGetter;
+						exploreElements: each childrenElements
+							atDepth: d - 1
+							withGetter: attrGetter ] ]
 ]
 
 { #category : #examples }
@@ -122,7 +106,8 @@ DocumapsVisualizations >> registerMouseClickHandlerForElement: element withGette
 			ev shiftKeyPressed
 				ifTrue: [ self cleanDownForElement: element ]
 				ifFalse: [ self addElement: element withGetter: attrGetter ].
-			layout on: element view elements .element view signalUpdate ].
+			layout on: element view elements.
+			element view signalUpdate ].
 	^ element
 ]
 
@@ -134,6 +119,26 @@ DocumapsVisualizations >> shapeBuilder [
 		borderColor: Color black;
 		borderWidth: 0.5;
 		yourself.
-	label := RTLabel text: [ :path | path  obj pathSegments last ].
+	label := RTLabel text: [ :path | path  pathSegments last ].
 	^ (box + label) allOfSameSizeWithPadding
+]
+
+{ #category : #examples }
+DocumapsVisualizations >> unfoldElement: element withGetter: attrGetter [
+	| children elements |
+	children := attrGetter value: element model.
+	elements := element shape elementsOn: children.
+	elements @ RTDraggableChildren.
+	elements
+		do: [ :child | 
+			child translateTo: element trachelShape position.
+			child parentElement: element.
+			self
+				registerMouseClickHandlerForElement: child
+				withGetter: attrGetter.
+			element view
+				add: child;
+				add: (self edgeBuilder edgeFrom: element to: child) ].
+	element folded: false.
+	^ elements
 ]

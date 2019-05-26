@@ -15,9 +15,34 @@ Population class >> withAll: aCollection [
 	^ self new subjects: aCollection; yourself
 ]
 
+{ #category : #accessing }
+Population >> collectFeature: aKey [
+ ^  subjects collect: [ :each | each at: aKey ]
+]
+
+{ #category : #move }
+Population >> grow [
+	self announce: (GrowEvent new)
+]
+
+{ #category : #accessing }
+Population >> mean: aFeature [
+ ^ (self collectFeature: aFeature) average
+]
+
 { #category : #moves }
 Population >> populationThreshold [
 ^ 5
+]
+
+{ #category : #move }
+Population >> prune [
+	self announce: PruneEvent new
+]
+
+{ #category : #move }
+Population >> pruneRandomly: aPredicateAboutElement [ 
+	self announce: (PruneEvent new predicate: aPredicateAboutElement; yourself)
 ]
 
 { #category : #moves }

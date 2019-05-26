@@ -14,3 +14,10 @@ RTElement >> folded [
 RTElement >> folded: aBoolean [ 
 	self attributeAt: #documapsFolded put: aBoolean
 ]
+
+{ #category : #'*RoassalPlayground' }
+RTElement >> presentation [
+	^ (self
+		getInteractionForClass: RTSelectableElementsContextInteraction)
+		presentation
+]

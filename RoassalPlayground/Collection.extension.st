@@ -1,6 +1,11 @@
 Extension { #name : #Collection }
 
 { #category : #'*RoassalPlayground' }
+Collection >> atRandomBounded [
+	^ self withMinMax: [ :min :max | Random new next * (max - min) ]
+]
+
+{ #category : #'*RoassalPlayground' }
 Collection >> withMinMax: aBlock [
 	| min max |
 	min := Float infinity.

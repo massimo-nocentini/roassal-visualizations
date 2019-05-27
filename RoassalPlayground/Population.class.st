@@ -29,7 +29,14 @@ Population >> collectFeature: aKey [
 
 { #category : #move }
 Population >> grow [
-	self announce: (GrowEvent new)
+	self growUsingFeatures: subjects first keys \ { #id }
+]
+
+{ #category : #'as yet unclassified' }
+Population >> growUsingFeatures: aCollection [
+
+self announce: (GrowEvent new features: aCollection ; yourself)
+	
 ]
 
 { #category : #accessing }
@@ -45,11 +52,6 @@ Population >> populationThreshold [
 { #category : #move }
 Population >> prune [
 	self announce: PruneEvent new
-]
-
-{ #category : #move }
-Population >> pruneRandomly: aPredicateAboutElement [ 
-	self announce: (PruneEvent new predicate: aPredicateAboutElement; yourself)
 ]
 
 { #category : #moves }
@@ -82,4 +84,10 @@ Population >> subjects [
 { #category : #accessing }
 Population >> subjects: aCollection [ 
 	subjects := aCollection
+]
+
+{ #category : #announcing }
+Population >> subtreeSelect: aPredicate then: aCollector [
+
+	self announce: (SelectEvent new predicate: aPredicate; collector: aCollector; yourself )
 ]

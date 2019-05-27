@@ -90,7 +90,7 @@ RegressionTreeTest >> edgeBuilder [
 RegressionTreeTest >> growEventHandler: ev withElement: anElement [
 	| aLeafElement aFeature aSplitValue |
 	aLeafElement := anElement leafElements atRandom.
-	aFeature := aLeafElement model subjects first keys atRandom.
+	aFeature := ev features atRandom.
 	aSplitValue := (aLeafElement model collectFeature: aFeature)
 		atRandomBounded.
 	aLeafElement model splitFeature: aFeature at: aSplitValue
@@ -139,35 +139,32 @@ RegressionTreeTest >> normalizerOnElements: elements [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> pruneEventHandler: ev withElement: anElement [
-	| removeBlock candidateElements |
-	candidateElements := ev predicate
-		ifNil: [ anElement childrenElements ]
-		ifNotNil: [ | satisfying |
-			satisfying := anElement withAllConnectedElements
-				select: ev predicate.
-			satisfying
-				ifEmpty: [ Array new ]
-				ifNotEmpty: [ | randomElement |
-					randomElement := satisfying atRandom.
-					(randomElement parentElement
-						ifNil: [ randomElement ])childrenElements ]  ].
-	removeBlock := nil.
-	removeBlock := [ :element | 
-	element childrenElements do: removeBlock.
-	element remove ].
-	candidateElements do: removeBlock.
+	anElement childrenElements do: #removeRecursively.
 	anElement view signalUpdate
 ]
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> registerEventHandlersForElement: anElement [
+
 	anElement model
 		when: SplitEvent
 			do: [ :ev | self splitEventHandler: ev withElement: anElement ];
 		when: GrowEvent
 			do: [ :ev | self growEventHandler: ev withElement: anElement ];
 		when: PruneEvent
-			do: [ :ev | self pruneEventHandler: ev withElement: anElement ]
+			do: [ :ev | self pruneEventHandler: ev withElement: anElement ];
+		when: SelectEvent
+			do: [ :ev | self selectEventHandler: ev withElement: anElement ]
+]
+
+{ #category : #'as yet unclassified' }
+RegressionTreeTest >> selectEventHandler: ev withElement: anElement [
+	| elements |
+	elements := anElement subtreeElements
+		select: ev predicate
+		thenCollect: #model.
+
+	ev collector value: elements
 ]
 
 { #category : #'as yet unclassified' }

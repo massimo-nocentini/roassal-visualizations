@@ -16,6 +16,11 @@ RTElement >> folded: aBoolean [
 ]
 
 { #category : #'*RoassalPlayground' }
+RTElement >> isLeaf [
+	^ self childrenElements isEmpty 
+]
+
+{ #category : #'*RoassalPlayground' }
 RTElement >> leafElements [
 	^ self childrenElements
 		ifEmpty: [ Array with: self ]
@@ -31,4 +36,13 @@ RTElement >> presentation [
 	^ (self
 		getInteractionForClass: RTSelectableElementsContextInteraction)
 		presentation
+]
+
+{ #category : #'*RoassalPlayground' }
+RTElement >> subtreeElements [
+|elements|
+	 elements := LinkedList with: self.
+			self childrenElements
+				do: [ :child | elements addAll: child subtreeElements ].
+	^		elements
 ]

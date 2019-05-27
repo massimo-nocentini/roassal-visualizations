@@ -11,8 +11,18 @@ Class {
 }
 
 { #category : #accessing }
+SplitEvent >> at [
+	^ at
+]
+
+{ #category : #accessing }
 SplitEvent >> at: aValue [
 	at:=aValue
+]
+
+{ #category : #accessing }
+SplitEvent >> feature [
+^ feature
 ]
 
 { #category : #accessing }

@@ -26,7 +26,7 @@ RegressionTreeTest >> CART [
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> addChild: each ofElement: anElement [
+RegressionTreeTest >> addChild: each ofElement: anElement afterEvent: ev [
 	| eachElement |
 	eachElement := anElement shape elementOn: each.
 	anElement view
@@ -36,22 +36,30 @@ RegressionTreeTest >> addChild: each ofElement: anElement [
 		presentation: anElement presentation;
 		initializeSingleElement: eachElement.
 	self registerEventHandlersForElement: eachElement.
-	self addInteractionsToElement: eachElement.
-	
+	self
+		addInteractionsToElement: eachElement
+		withPopulationDescriptor:
+			[ :aPopulation | self describePopulation: aPopulation afterSplitEvent: ev ].
 	eachElement translateTo: anElement trachelShape position.
 	eachElement parentElement: anElement
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> addInteractionsToElement: anElement [
+RegressionTreeTest >> addInteractionsToElement: anElement [ 
+ self addInteractionsToElement: anElement withPopulationDescriptor: [ :aPopulation | self describePopulation: aPopulation ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+RegressionTreeTest >> addInteractionsToElement: anElement withPopulationDescriptor: aBlock [
 	^ anElement @ RTDraggableChildren
 		@
 			(RTHighlightable new
-	color: Color gray;
+				color: Color gray;
 				yourself)
 		@
 			(RTPopup new
-				text: [ :aPopulation | self describePopulation: aPopulation ];
+				text: aBlock;
 				yourself)
 ]
 
@@ -60,6 +68,17 @@ RegressionTreeTest >> describePopulation: aPopulation [
 	^ 'subjects: ' , aPopulation subjects size asString , String cr
 		, 'mean: ' , (aPopulation mean: #y) asString , String cr , 'RSS: '
 		, (aPopulation RSS: #y) asString
+]
+
+{ #category : #'as yet unclassified' }
+RegressionTreeTest >> describePopulation: aPopulation afterSplitEvent: ev [
+	| sym |
+	sym := aPopulation == ev firstHalf
+		ifTrue: [ '<' ]
+		ifFalse: [ '>=' ].
+	^ ev feature asString , String space , sym , String space
+		, ev at asString , String cr
+		, (self describePopulation: aPopulation)
 ]
 
 { #category : #'as yet unclassified' }
@@ -165,8 +184,8 @@ RegressionTreeTest >> splitEventHandler: ev withElement: anElement [
 	aView := anElement view.
 	{ev firstHalf.
 	ev secondHalf}
-		do: [ :each | self addChild: each ofElement: anElement ].
-	self normalizerOnElements:  aView elements.
+		do: [ :each | self addChild: each ofElement: anElement afterEvent: ev].
+	self normalizerOnElements: aView elements.
 	self layoutWithTranslator on: aView elements.
 	aView signalUpdate
 ]

@@ -16,6 +16,13 @@ Population class >> withAll: aCollection [
 ]
 
 { #category : #accessing }
+Population >> RSS: aFeature [
+	|avg|
+	avg := self mean:aFeature .
+	^ ((self collectFeature: aFeature) collect:[:each | (each - avg) ** 2]) sum
+]
+
+{ #category : #accessing }
 Population >> collectFeature: aKey [
  ^  subjects collect: [ :each | each at: aKey ]
 ]

@@ -44,15 +44,22 @@ RegressionTreeTest >> addChild: each ofElement: anElement [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> addInteractionsToElement: anElement [
-	| popupBlock |
-	popupBlock := [ :aPopulation | 
-	'subjects: ' , aPopulation subjects size asString , String cr
-		, 'mean: ' , (aPopulation mean: #y) asString ].
 	^ anElement @ RTDraggableChildren
 		@
-			(RTPopup new
-				text: popupBlock;
+			(RTHighlightable new
+	color: Color gray;
 				yourself)
+		@
+			(RTPopup new
+				text: [ :aPopulation | self describePopulation: aPopulation ];
+				yourself)
+]
+
+{ #category : #'as yet unclassified' }
+RegressionTreeTest >> describePopulation: aPopulation [
+	^ 'subjects: ' , aPopulation subjects size asString , String cr
+		, 'mean: ' , (aPopulation mean: #y) asString , String cr , 'RSS: '
+		, (aPopulation RSS: #y) asString
 ]
 
 { #category : #'as yet unclassified' }
@@ -104,6 +111,14 @@ RegressionTreeTest >> makePopulationWith: populationSize [
 ]
 
 { #category : #'as yet unclassified' }
+RegressionTreeTest >> normalizerOnElements: elements [
+	^ RTMetricNormalizer new
+		elements: elements;
+			normalizeHeight: [ :aPopulation | aPopulation RSS: #y ];
+		yourself
+]
+
+{ #category : #'as yet unclassified' }
 RegressionTreeTest >> pruneEventHandler: ev withElement: anElement [
 	| removeBlock candidateElements |
 	candidateElements := ev predicate
@@ -151,9 +166,7 @@ RegressionTreeTest >> splitEventHandler: ev withElement: anElement [
 	{ev firstHalf.
 	ev secondHalf}
 		do: [ :each | self addChild: each ofElement: anElement ].
-	RTMetricNormalizer new
-		elements: aView elements;
-		normalizeHeight: [ :aPopulation | aPopulation mean: #y ].
+	self normalizerOnElements:  aView elements.
 	self layoutWithTranslator on: aView elements.
 	aView signalUpdate
 ]

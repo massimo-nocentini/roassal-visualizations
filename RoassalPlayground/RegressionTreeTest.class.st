@@ -26,6 +26,15 @@ RegressionTreeTest >> CART [
 ]
 
 { #category : #'as yet unclassified' }
+RegressionTreeTest >> SRSSdecoratorForBlock: aBlock withElement: anElement [
+^[ :aPopulation | 
+					(aBlock value: aPopulation) , String cr , 'SRSS: '
+						,
+							(anElement leafElements collect: [ :each | each model RSS: #y ]) sum
+								asString ]
+]
+
+{ #category : #'as yet unclassified' }
 RegressionTreeTest >> addChild: each ofElement: anElement afterEvent: ev [
 	| eachElement |
 	eachElement := anElement shape elementOn: each.
@@ -59,7 +68,7 @@ RegressionTreeTest >> addInteractionsToElement: anElement withPopulationDescript
 				yourself)
 		@
 			(RTPopup new
-				text: aBlock;
+				text: (self SRSSdecoratorForBlock: aBlock withElement: anElement);
 				yourself)
 ]
 

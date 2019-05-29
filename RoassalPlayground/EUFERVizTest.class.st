@@ -11,10 +11,10 @@ EUFERVizTest >> firstProse [
 golden statue of the Virgin Mary. Immediately in front of the Main Building and facing it, is a copper statue of Christ with arms upraised with the legend ""Venite Ad Me Omnes"". Next to the Main Building is the Basilica of the Sacred Heart. Immediately behind the basilica is the Grotto, a Marian place of prayer and reflection. It is a replica of the grotto at Lourdes, France where the Virgin Mary reputedly appeared to Saint Bernadette Soubirous in 1858. At the end of the main drive (and in a direct line that connects through 3 statues and the Gold Dome), is a simple, modern stone statue of Mary."
 	dict := NeoJSONReader
 		fromString: '/Users/mn/Developer/sandbox/zz/out.json' asFileReference contents.
-	text := dict at: 'text'.
+	text := dict at: #text.
 	transformer := [ :each | 
 	each
-		at: #text
+		at: 'text'
 		put: (text copyFrom: (each at: #start) + 1 to: (each at: #end)) ].
 	"Adjusting desired subfields."
 	(dict at: #ents) do: transformer.
@@ -37,14 +37,21 @@ EUFERVizTest >> firstViz [
 		yourself) + (RTLabel new text: [ :aDict | aDict at: #text ]).
 	s allOfSameSize.
 	es := s elementsOn: tokens.
-	es @ RTDraggableChildren.
+	es @ RTDraggableChildren
+		@ (RTPopup new text: [ :each | each at: #tagDecoded ]).
 	RTEdgeBuilder new
 		view: v;
+		shape:
+			(RTLine new
+				attachPoint: RTShorterDistanceAttachPoint new;
+				yourself) + (RTSimpleArrowHead new attachPoint: RTShorterDistanceAttachPoint new;
+				yourself);
 		elements: es;
-		"connectFrom: [ :aDict | tokens at: (aDict at: #id) + 1 ]"
-			connectTo: [ :aDict | tokens at: (aDict at: #head) + 1 ].
+		label: [ :from :to | (to at: #depDecoded) ifNil: [ to at: #dep ] ];
+		connectFrom: [ :aDict | tokens at: (aDict at: #head) + 1 ].
 	v addAll: es.
+	v @ RTDraggableView.
 	"RTRectanglePackLayout on: es."
-	RTRadialTreeLayout on: es.
+	RTClusterLayout on: es.
 	^ v
 ]

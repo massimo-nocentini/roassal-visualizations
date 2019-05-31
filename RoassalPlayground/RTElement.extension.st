@@ -6,6 +6,11 @@ RTElement >> childrenElements [
 ]
 
 { #category : #'*RoassalPlayground' }
+RTElement >> depth [
+^	self parentElement ifNil: [ 0 ] ifNotNil: [ 1 + self parentElement depth ]
+]
+
+{ #category : #'*RoassalPlayground' }
 RTElement >> folded [
 	^ self attributeAt: #documapsFolded ifAbsentPut: [ true ]
 ]
@@ -36,6 +41,12 @@ RTElement >> presentation [
 	^ (self
 		getInteractionForClass: RTSelectableElementsContextInteraction)
 		presentation
+]
+
+{ #category : #'*RoassalPlayground' }
+RTElement >> removeRecursively [
+	self childrenElements do: #removeRecursively.
+	self remove 
 ]
 
 { #category : #'*RoassalPlayground' }

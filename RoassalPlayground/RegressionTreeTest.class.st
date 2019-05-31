@@ -27,11 +27,11 @@ RegressionTreeTest >> CART [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> SRSSdecoratorForBlock: aBlock withElement: anElement [
-^[ :aPopulation | 
-					(aBlock value: aPopulation) , String cr , 'SRSS: '
-						,
-							(anElement leafElements collect: [ :each | each model RSS: #y ]) sum
-								asString ]
+	^ [ :aPopulation | 
+	| SRSS |
+	SRSS := (anElement leafElements
+		collect: [ :each | each model RSS: #y ]) sum.
+	(aBlock value: aPopulation) , String cr , 'SRSS: ' , SRSS asString ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -47,20 +47,20 @@ RegressionTreeTest >> addChild: each ofElement: anElement afterEvent: ev [
 	self registerEventHandlersForElement: eachElement.
 	self
 		addInteractionsToElement: eachElement
-		withPopulationDescriptor:
-			[ :aPopulation | self describePopulation: aPopulation afterSplitEvent: ev ].
+		withPopupDescriptor: [ :_ | self describeModelOfElement: eachElement afterSplitEvent: ev ].
 	eachElement translateTo: anElement trachelShape position.
 	eachElement parentElement: anElement
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> addInteractionsToElement: anElement [ 
- self addInteractionsToElement: anElement withPopulationDescriptor: [ :aPopulation | self describePopulation: aPopulation ]
-	
+RegressionTreeTest >> addInteractionsToElement: anElement [
+	self
+		addInteractionsToElement: anElement
+		withPopupDescriptor: [ :_ | self describeModelOfElement: anElement ]
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> addInteractionsToElement: anElement withPopulationDescriptor: aBlock [
+RegressionTreeTest >> addInteractionsToElement: anElement withPopupDescriptor: aBlock [
 	^ anElement @ RTDraggableChildren
 		@
 			(RTHighlightable new
@@ -73,21 +73,27 @@ RegressionTreeTest >> addInteractionsToElement: anElement withPopulationDescript
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> describePopulation: aPopulation [
-	^ 'subjects: ' , aPopulation subjects size asString , String cr
-		, 'mean: ' , (aPopulation mean: #y) asString , String cr , 'RSS: '
+RegressionTreeTest >> describeModelOfElement: anElement [
+	| aPopulation percentage |
+	aPopulation := anElement model.
+	percentage := aPopulation subjects size
+		/ anElement rootElement model subjects size * 100.
+	^ 'subjects: ' , aPopulation subjects size asString , ' ('
+		, percentage asFloat asString , '%)' , String cr , 'mean: '
+		, (aPopulation mean: #y) asString , String cr , 'RSS: '
 		, (aPopulation RSS: #y) asString
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> describePopulation: aPopulation afterSplitEvent: ev [
-	| sym |
-	sym := aPopulation == ev firstHalf
+RegressionTreeTest >> describeModelOfElement: anElement afterSplitEvent: ev [
+	| sym  |
+	
+	sym := anElement model == ev firstHalf
 		ifTrue: [ '<' ]
 		ifFalse: [ '>=' ].
 	^ ev feature asString , String space , sym , String space
 		, ev at asString , String cr
-		, (self describePopulation: aPopulation)
+		, (self describeModelOfElement: anElement)
 ]
 
 { #category : #'as yet unclassified' }

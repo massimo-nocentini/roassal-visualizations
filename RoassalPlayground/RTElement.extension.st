@@ -50,6 +50,11 @@ RTElement >> removeRecursively [
 ]
 
 { #category : #'*RoassalPlayground' }
+RTElement >> rootElement [
+	^ self parentElement ifNil: [ self ] ifNotNil: [ self parentElement rootElement  ]
+]
+
+{ #category : #'*RoassalPlayground' }
 RTElement >> subtreeElements [
 |elements|
 	 elements := LinkedList with: self.

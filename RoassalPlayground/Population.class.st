@@ -29,7 +29,7 @@ Population >> collectFeature: aKey [
 
 { #category : #move }
 Population >> grow [
-	self growUsingFeatures: subjects first keys \ { #id }
+	self growUsingFeatures: subjects first keys \ {#id . #y}
 ]
 
 { #category : #'as yet unclassified' }

@@ -19,23 +19,16 @@ RegressionTreeTest >> CART [
 	v add: rootElement.
 	v attributeAt: #rootElement put: rootElement.
 	self
-		registerEventHandlersForElement: rootElement;
-		addInteractionsToElement: rootElement.
+		registerEventHandlersForElement: rootElement.
+		self
+		addInteractionsToElement: rootElement
+			withPopupDescriptor: [ :_ | self describeModelOfElement: rootElement ].
 	RTTreeLayout on: v elements.
 	^ v
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> SRSSdecoratorForBlock: aBlock withElement: anElement [
-	^ [ :aPopulation | 
-	| SRSS |
-	SRSS := (anElement leafElements
-		collect: [ :each | each model RSS: #y ]) sum.
-	(aBlock value: aPopulation) , String cr , 'SRSS: ' , SRSS asString ]
-]
-
-{ #category : #'as yet unclassified' }
-RegressionTreeTest >> addChild: each ofElement: anElement afterEvent: ev [
+RegressionTreeTest >> addChild: each ofElement: anElement afterSplitEvent: ev [
 	| eachElement |
 	eachElement := anElement shape elementOn: each.
 	anElement view
@@ -53,13 +46,6 @@ RegressionTreeTest >> addChild: each ofElement: anElement afterEvent: ev [
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> addInteractionsToElement: anElement [
-	self
-		addInteractionsToElement: anElement
-		withPopupDescriptor: [ :_ | self describeModelOfElement: anElement ]
-]
-
-{ #category : #'as yet unclassified' }
 RegressionTreeTest >> addInteractionsToElement: anElement withPopupDescriptor: aBlock [
 	^ anElement @ RTDraggableChildren
 		@
@@ -68,20 +54,24 @@ RegressionTreeTest >> addInteractionsToElement: anElement withPopupDescriptor: a
 				yourself)
 		@
 			(RTPopup new
-				text: (self SRSSdecoratorForBlock: aBlock withElement: anElement);
+				text: aBlock;
 				yourself)
 ]
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> describeModelOfElement: anElement [
-	| aPopulation percentage |
+	| aPopulation percentage SRSS|
 	aPopulation := anElement model.
 	percentage := aPopulation subjects size
 		/ anElement rootElement model subjects size * 100.
+		
+	SRSS := (anElement leafElements
+		collect: [ :each | each model RSS: #y ]) sum.
+		
 	^ 'subjects: ' , aPopulation subjects size asString , ' ('
 		, percentage asFloat asString , '%)' , String cr , 'mean: '
 		, (aPopulation mean: #y) asString , String cr , 'RSS: '
-		, (aPopulation RSS: #y) asString
+		, (aPopulation RSS: #y) asString , String cr , 'SRSS: ' , SRSS asString
 ]
 
 { #category : #'as yet unclassified' }
@@ -202,7 +192,7 @@ RegressionTreeTest >> splitEventHandler: ev withElement: anElement [
 	aView := anElement view.
 	{ev firstHalf.
 	ev secondHalf}
-		do: [ :each | self addChild: each ofElement: anElement afterEvent: ev].
+		do: [ :each | self addChild: each ofElement: anElement afterSplitEvent: ev].
 	self normalizerOnElements: aView elements.
 	self layoutWithTranslator on: aView elements.
 	aView signalUpdate

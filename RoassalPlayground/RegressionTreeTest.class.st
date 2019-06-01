@@ -184,9 +184,15 @@ RegressionTreeTest >> selectEventHandler: ev withElement: anElement [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> shapeBuilder [
+	| color |
+	color := RTMultiLinearColor new
+		colors: RTPalette c4;
+		command: [ :each | each mean: #y ];
+		yourself.
 	^ RTBox new
 		width: [ :aPopulation | aPopulation subjects size ];
-			borderColor: Color black;
+		borderColor: Color black;
+		color: color;
 		yourself
 ]
 

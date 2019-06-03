@@ -10,26 +10,26 @@ Class {
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> CART [
 	<gtExample>
-	| v rootElement shapeBuilder initialPopulation |
-	shapeBuilder := self shapeBuilder.
+	| v rootElement  initialPopulation |
+	initialPopulation := self makePopulationWith: 1000.
+	
+	rootElement := self shapeBuilder elementOn: initialPopulation.
 	v := RTView new.
 	v @ RTDraggableView.
-	initialPopulation := self makePopulationWith: 1000.
-	rootElement := shapeBuilder elementOn: initialPopulation.
+	rootElement attributeAt: #splitBounds put: Dictionary new.
 	v add: rootElement.
 	v attributeAt: #rootElement put: rootElement.
+	self registerEventHandlersForElement: rootElement.
 	self
-		registerEventHandlersForElement: rootElement.
-		self
 		addInteractionsToElement: rootElement
-			withPopupDescriptor: [ :_ | self describeModelOfElement: rootElement ].
+		withPopupDescriptor: [ :_ | self describeModelOfElement: rootElement ].
 	RTTreeLayout on: v elements.
 	^ v
 ]
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> addChild: each ofElement: anElement afterSplitEvent: ev [
-	| eachElement |
+	| eachElement bounds valuesOfSplittedFeature halfInterval |
 	eachElement := anElement shape elementOn: each.
 	anElement view
 		add: eachElement;
@@ -42,7 +42,21 @@ RegressionTreeTest >> addChild: each ofElement: anElement afterSplitEvent: ev [
 		addInteractionsToElement: eachElement
 		withPopupDescriptor: [ :_ | self describeModelOfElement: eachElement afterSplitEvent: ev ].
 	eachElement translateTo: anElement trachelShape position.
-	eachElement parentElement: anElement
+	eachElement parentElement: anElement.
+	bounds := (eachElement parentElement attributeAt: #splitBounds) copy.
+	valuesOfSplittedFeature := eachElement model
+		collectFeature: ev feature.
+	halfInterval := eachElement model == ev firstHalf
+		ifTrue: [ '<'.
+			valuesOfSplittedFeature min to: ev at ]
+		ifFalse: [ '>='.
+			ev at to: valuesOfSplittedFeature max ].
+	bounds
+		at: ev feature
+		ifPresent:
+			[ :anInterval | bounds at: ev feature put: halfInterval <& anInterval ]
+		ifAbsentPut: [ halfInterval ].
+	eachElement attributeAt: #splitBounds put: bounds
 ]
 
 { #category : #'as yet unclassified' }
@@ -76,19 +90,28 @@ RegressionTreeTest >> describeModelOfElement: anElement [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> describeModelOfElement: anElement afterSplitEvent: ev [
-	| sym  |
-	
-	sym := anElement model == ev firstHalf
-		ifTrue: [ '<' ]
-		ifFalse: [ '>=' ].
-	^ ev feature asString , String space , sym , String space
-		, ev at asString , String cr
-		, (self describeModelOfElement: anElement)
+	| boundsRepr bounds |
+	bounds := anElement attributeAt: #splitBounds.
+	boundsRepr := String
+		streamContents: [ :s | 
+			bounds
+				keysAndValuesDo: [ :k :v | 
+					s
+						nextPutAll: String tab;
+						nextPutAll: v start asString;
+						nextPutAll: ' < ';
+						nextPutAll: k asString;
+						nextPutAll: ' <= ';
+						nextPutAll: v stop asString;
+						nextPutAll: String cr;
+						yourself ] ].
+	^ 'Split of ' , ev feature asString , ' at ' , ev at asString ,  ', bounds:'
+		, String cr , boundsRepr , (self describeModelOfElement: anElement)
 ]
 
 { #category : #'as yet unclassified' }
-RegressionTreeTest >> edgeBuilder [ 
- ^ RTEdgeBuilder new shape orthoVerticalLine.
+RegressionTreeTest >> edgeBuilder [
+	^ RTEdgeBuilder new shape color: Color black; orthoVerticalLine
 ]
 
 { #category : #'as yet unclassified' }

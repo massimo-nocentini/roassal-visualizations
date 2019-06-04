@@ -3,7 +3,8 @@ Class {
 	#superclass : #Announcement,
 	#instVars : [
 		'predicate',
-		'collector'
+		'collector',
+		'result'
 	],
 	#category : #RoassalPlayground
 }
@@ -26,4 +27,14 @@ SelectEvent >> predicate [
 { #category : #accessing }
 SelectEvent >> predicate: aBlockClosure [ 
 predicate:= aBlockClosure 
+]
+
+{ #category : #accessing }
+SelectEvent >> result [
+	^ result
+]
+
+{ #category : #accessing }
+SelectEvent >> result: aValue [ 
+	result := aValue
 ]

@@ -191,8 +191,7 @@ RegressionTreeTest >> selectEventHandler: ev withElement: anElement [
 	elements := anElement subtreeElements
 		select: ev predicate
 		thenCollect: #model.
-
-	ev collector value: elements
+	ev result: (ev collector value: elements)
 ]
 
 { #category : #'as yet unclassified' }

@@ -140,9 +140,9 @@ RegressionTreeTest >> layoutWithTranslator [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> makePopulationWith: populationSize [
-	| population rand |
+	| subjects rand |
 	rand := Random new.
-	population := LinkedList new.
+	subjects := LinkedList new.
 	1 to: populationSize do: [ :i | 
 		| subject |
 		subject := Dictionary new
@@ -153,8 +153,8 @@ RegressionTreeTest >> makePopulationWith: populationSize [
 			at: #x3 put: rand next;
 			at: #y put: rand next;
 			yourself.
-		population add: subject ].
-	^ Population withAll: population
+		subjects add: subject ].
+	^ Population new subjects: subjects; response: #y; yourself
 ]
 
 { #category : #'as yet unclassified' }

@@ -2,14 +2,36 @@ Extension { #name : #Collection }
 
 { #category : #'*RoassalPlayground' }
 Collection >> arg: aSelector function: aBlockClosure opt: sortBlock [
-	| tuples heap |
+	| tuples heap progress |
 	heap := Heap
-		sortBlock:
-			[ :anAssoc :anotherAssoc | sortBlock valueWithArguments: {   anAssoc value . anotherAssoc value }].
-	tuples := self flatCollect: aSelector.
+		sortBlock: [ :anAssoc :anotherAssoc | 
+			sortBlock
+				valueWithArguments:
+					{anAssoc value.
+					anotherAssoc value} ].
+	progress := 0.
+	tuples := [ :job | 
+	self
+		flatCollect: [ :aPopulation | 
+			| perc |
+			progress := progress + 1.
+			perc := progress / self size.
+			job
+				progress: perc;
+				title: 'Building the search space (' , perc printString , '%)'.
+			aSelector value: aPopulation ] ] asJob run.
+	progress := 0.
+	[ :job | 
 	tuples
 		collect: [ :tuple | tuple unpackOnBlock: aBlockClosure ]
-		thenDoWithEach: [ :tuple :v | v ifNotNil: [ heap add: tuple -> v ] ].
+		thenDoWithEach: [ :tuple :v | 
+			| perc |
+			progress := progress + 1.
+			perc := (progress / tuples size) asFloat.
+			job
+				progress: perc;
+				title: 'Ranking tuples (' , perc printString , '%)'.
+			v ifNotNil: [ heap add: tuple -> v ] ] ] asJob run.
 	^ heap
 ]
 

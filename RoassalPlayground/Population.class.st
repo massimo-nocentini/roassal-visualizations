@@ -2,7 +2,8 @@ Class {
 	#name : #Population,
 	#superclass : #Announcer,
 	#instVars : [
-		'subjects'
+		'subjects',
+		'response'
 	],
 	#classInstVars : [
 		'subjects'
@@ -10,16 +11,24 @@ Class {
 	#category : #RoassalPlayground
 }
 
-{ #category : #creating }
-Population class >> withAll: aCollection [
-	^ self new subjects: aCollection; yourself
-]
-
 { #category : #accessing }
 Population >> RSS: aFeature [
 	|avg|
 	avg := self mean:aFeature .
 	^ ((self collectFeature: aFeature) collect:[:each | (each - avg) ** 2]) sum
+]
+
+{ #category : #'as yet unclassified' }
+Population >> cartesianProductOfFeaturesAndValues [
+
+^ self features
+		flatCollect: [ :aFeature | 
+			(self collectFeature: aFeature)
+				collect: [ :aValue | 
+					{aFeature.
+					aValue.
+					self} ] ] .
+
 ]
 
 { #category : #accessing }
@@ -29,7 +38,7 @@ Population >> collectFeature: aKey [
 
 { #category : #accessing }
 Population >> features [
-	^ subjects first keys \ {#id . #y}
+	^ subjects first keys \ {#id . response}
 ]
 
 { #category : #move }
@@ -51,34 +60,46 @@ Population >> mean: aFeature [
 ]
 
 { #category : #'as yet unclassified' }
+Population >> optimizationFunction: aPopulation wrt: aSelector [
+
+	^ (self subjects size > 5 and: [ aPopulation  subjects size > 5 ])
+								ifTrue: [ (aSelector value: self) + (aSelector value: aPopulation ) ]
+]
+
+{ #category : #'as yet unclassified' }
 Population >> optimizedGrow [
-	| ranking |
-	ranking := self
+	| aSelectEvent |
+	aSelectEvent := self
 		subtreeSelect: #isLeaf
 		then: [ :populations | 
 			populations
-				argMin: [ :aPopulation | 
-					aPopulation features
-						flatCollect: [ :aFeature | 
-							(aPopulation collectFeature: aFeature)
-								collect: [ :aValue | 
-									{aFeature.
-									aValue.
-									aPopulation} ] ] ]
+				argMin: #cartesianProductOfFeaturesAndValues
 				function: [ :f :v :p | 
 					p
 						splitFeature: f
 						at: v
-						with: [ :l :g | 
-							(l subjects size > 5 and: [ g subjects size > 5 ])
-								ifTrue: [ (l RSS: #y) + (g RSS: #y) ] ] ] ].
-	ranking result
-		ifNotEmpty: [ :heap | heap first key unpackOnBlock: [ :f :v :p | p splitFeature: f at: v ] ] 
+						with: [ :l :g | l optimizationFunction: g wrt: #responseRSS ] ] ].
+	aSelectEvent result
+		ifNotEmpty:
+			[ :heap | heap first key unpackOnBlock: [ :f :v :p | p splitFeature: f at: v ] ]
 ]
 
 { #category : #move }
 Population >> prune [
 	self announce: PruneEvent new
+]
+
+{ #category : #accessing }
+Population >> response: aString [ 
+	response := aString
+]
+
+{ #category : #accessing }
+Population >> responseRSS [
+	| avg |
+	avg := self mean: response.
+	^ ((self collectFeature: response)
+		collect: [ :each | (each - avg) ** 2 ]) sum
 ]
 
 { #category : #moves }
@@ -106,9 +127,10 @@ Population >> splitFeature: aString at: aNumber with: aReceiver [
 		do: [ :each | 
 			(each at: aString) < aNumber
 				ifTrue: [ sat add: each ]
-				ifFalse: [  noSat add: each ] ].
-			^ aReceiver value: (Population withAll: sat) value: (Population withAll: noSat)
-	
+				ifFalse: [ noSat add: each ] ].
+	^ aReceiver
+		value: (Population new response: response; subjects: sat; yourself)
+		value: (Population new response: response; subjects:  noSat; yourself)
 ]
 
 { #category : #accessing }

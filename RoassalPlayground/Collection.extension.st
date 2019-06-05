@@ -56,6 +56,11 @@ Collection >> collect: collectBlock thenDoWithEach: doBlock [
 ]
 
 { #category : #'*RoassalPlayground' }
+Collection >> unpackOnBlock: aBlockClosure [ 
+	^ aBlockClosure valueWithArguments: self
+]
+
+{ #category : #'*RoassalPlayground' }
 Collection >> withMinMax: aBlock [
 	| min max |
 	min := Float infinity.

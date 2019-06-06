@@ -111,7 +111,8 @@ RegressionTreeTest >> describeModelOfElement: anElement afterSplitEvent: ev [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> edgeBuilder [
-	^ RTEdgeBuilder new shape color: Color black; orthoVerticalLine
+	^ RTEdgeBuilder new shape
+		color: Color black;orthoVerticalLine
 ]
 
 { #category : #'as yet unclassified' }

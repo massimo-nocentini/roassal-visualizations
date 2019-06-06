@@ -20,15 +20,18 @@ Population >> RSS: aFeature [
 
 { #category : #'as yet unclassified' }
 Population >> cartesianProductOfFeaturesAndValues [
-
-^ self features
+	| wrappedPopulation |
+	wrappedPopulation := Dictionary new
+		at: #model put: self;
+		at: #exploredDuringGrow put: false;
+		yourself.
+	^ self features
 		flatCollect: [ :aFeature | 
 			(self collectFeature: aFeature)
 				collect: [ :aValue | 
 					{aFeature.
 					aValue.
-					self} ] ] .
-
+					wrappedPopulation} ] ]
 ]
 
 { #category : #accessing }
@@ -54,34 +57,43 @@ self announce: (GrowEvent new features: aCollection ; yourself)
 	
 ]
 
+{ #category : #'as yet unclassified' }
+Population >> growerOnHeap: heap usingWeight: weightBlock [
+	[ (heap removeFirst key
+		unpackOnBlock: [ :f :v :p | 
+			"discard its ranking which is the response of #value"
+			(p at: #exploredDuringGrow)
+				ifTrue: [ true	"keep removing elements" ]
+				ifFalse: [ 
+					p at: #exploredDuringGrow put: true.
+					
+					(p at: #model) splitFeature: f at: v thenArgMin: weightBlock usingHeap: heap.
+					.
+					false ] ]) and: [ heap isNotEmpty ] ] whileTrue
+]
+
 { #category : #accessing }
 Population >> mean: aFeature [
  ^ (self collectFeature: aFeature) average
 ]
 
 { #category : #'as yet unclassified' }
-Population >> optimizationFunction: aPopulation wrt: aSelector [
-
-	^ (self subjects size > 5 and: [ aPopulation  subjects size > 5 ])
-								ifTrue: [ (aSelector value: self) + (aSelector value: aPopulation ) ]
-]
-
-{ #category : #'as yet unclassified' }
 Population >> optimizedGrow [
-	| aSelectEvent |
+	| aSelectEvent weightBlock heap |
+	weightBlock := [ :f :v :p | 
+	(p at: #model)
+		splitFeature: f
+		at: v
+		with: [ :l :g | l weightFunction: g wrt: #responseRSS ] ].
 	aSelectEvent := self
 		subtreeSelect: #isLeaf
 		then: [ :populations | 
 			populations
 				argMin: #cartesianProductOfFeaturesAndValues
-				function: [ :f :v :p | 
-					p
-						splitFeature: f
-						at: v
-						with: [ :l :g | l optimizationFunction: g wrt: #responseRSS ] ] ].
-	aSelectEvent result
-		ifNotEmpty:
-			[ :heap | heap first key unpackOnBlock: [ :f :v :p | p splitFeature: f at: v ] ]
+				function: weightBlock ].
+	heap := aSelectEvent result copy.
+	^ [ heap isNotEmpty
+		ifTrue: [ self growerOnHeap: heap usingWeight: weightBlock ] ]
 ]
 
 { #category : #move }
@@ -104,18 +116,31 @@ Population >> responseRSS [
 
 { #category : #moves }
 Population >> splitFeature: aString at: aNumber [
-	self
+	^ self
 		splitFeature: aString
 		at: aNumber
 		with: [ :lessThanPopulation :greaterThanPopulation | 
-			 self
-						announce:
-							(SplitEvent new
-								feature: aString;
-								at: aNumber;
-								firstHalf: lessThanPopulation;
-								secondHalf: greaterThanPopulation;
-								yourself) ] 
+			self
+				announce:
+					(SplitEvent new
+						feature: aString;
+						at: aNumber;
+						firstHalf: lessThanPopulation;
+						secondHalf: greaterThanPopulation;
+						yourself) ]
+]
+
+{ #category : #accessing }
+Population >> splitFeature: f at: v thenArgMin: weightBlock usingHeap: heap [
+	| splitEvent newPopulations |
+					splitEvent := self splitFeature: f at: v.
+					newPopulations := Array
+						with: splitEvent firstHalf
+						with: splitEvent secondHalf.
+					newPopulations
+						arg: #cartesianProductOfFeaturesAndValues
+						function: weightBlock
+						using: heap.
 ]
 
 { #category : #moves }
@@ -151,4 +176,11 @@ Population >> subtreeSelect: aPredicate then: aCollector [
 				predicate: aPredicate;
 				collector: aCollector;
 				yourself)
+]
+
+{ #category : #'as yet unclassified' }
+Population >> weightFunction: aPopulation wrt: aSelector [
+
+	^ (self subjects size > 5 and: [ aPopulation  subjects size > 5 ])
+								ifTrue: [ (aSelector value: self) + (aSelector value: aPopulation ) ]
 ]

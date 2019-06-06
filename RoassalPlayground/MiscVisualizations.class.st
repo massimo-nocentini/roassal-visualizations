@@ -5,6 +5,35 @@ Class {
 }
 
 { #category : #examples }
+MiscVisualizations >> arclineViz [
+	<gtExample>
+	| v els e1 e2  |
+	v := RTView new.
+	els := RTEllipse new
+		color: Color gray;
+		borderColor: Color black;
+		size: 20;
+		elementsOn: #(A B).
+	els @ RTDraggable.
+	v addAll: els.
+	els second translateBy: 100 @ 0.
+	e1 := RTArcLine new
+		distance: 10;
+		filledNarrowArrowHead;
+		color: Color black;
+		edgeFrom: els first to: els second.
+	e2 := RTArcLine new
+		distance: 10;
+		filledNarrowArrowHead;
+		color: Color black;
+		edgeFrom: els second to: els first.
+	v
+		add: e1;
+		add: e2.
+	^ v
+]
+
+{ #category : #examples }
 MiscVisualizations >> bezierTest [
 	<gtExample>
 	| b v children |

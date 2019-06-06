@@ -2,13 +2,18 @@ Extension { #name : #Collection }
 
 { #category : #'*RoassalPlayground' }
 Collection >> arg: aSelector function: aBlockClosure opt: sortBlock [
-	| tuples heap progress |
-	heap := Heap
+
+	^ self arg: aSelector function: aBlockClosure using: (Heap
 		sortBlock: [ :anAssoc :anotherAssoc | 
 			sortBlock
 				valueWithArguments:
 					{anAssoc value.
-					anotherAssoc value} ].
+					anotherAssoc value} ])
+]
+
+{ #category : #'*RoassalPlayground' }
+Collection >> arg: aSelector function: aBlockClosure using: heap [
+	| tuples  progress |
 	progress := 0.
 	tuples := [ :job | 
 	self

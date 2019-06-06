@@ -20,9 +20,9 @@ This repository can be cloned and loaded with `Iceberg` and it contains the pack
 
 ### Regression tree
 Each box denotes a population of subjects where (i) its width is proportional to the number of subject in the corresponding
-population and (ii) its height is proportial to the Residual Sum of Squares wrt the response variable.
+population and (ii) its height is proportial to the Residual Sum of Squares wrt the response variable. The following screenshot shows the interactive env during a sequence of consecutive *grow* moves:
 
-![regression tree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/regression-tree.svg)
+![regression tree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/regression-tree-during-grow-moves.png)
 
 ## Combinatorial visualizations
 

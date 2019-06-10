@@ -139,6 +139,76 @@ MiscVisualizations >> fibonacci [
 ]
 
 { #category : #examples }
+MiscVisualizations >> kmeans [
+	"Viz taken from: https://gist.github.com/zeroflag/f30f3c4329c69d7edb2f"
+
+	<gtExample>
+	| randomPoint points kmeans cluster1 cluster2 cluster3 cluster1ds cluster2ds cluster3ds centroids |
+	randomPoint := [ (0 to: 5) atRandom @ (0 to: 5) atRandom ].
+	points := (1 to: 100)
+		collect: [ :i | (500 atRandom / 100) @ (500 atRandom / 100) ].
+	kmeans := [ :centroid1 :centroid2 :centroid3 | 
+	cluster1 := Set new.
+	cluster2 := Set new.
+	cluster3 := Set new.
+	points
+		do: [ :each | 
+			| nearest |
+			nearest := {(cluster1 -> (each squaredDistanceTo: centroid1)).
+			(cluster2 -> (each squaredDistanceTo: centroid2)).
+			(cluster3 -> (each squaredDistanceTo: centroid3))}
+				detectMin: #value.
+			nearest key add: each ].
+	cluster1ds := RTData new.
+	cluster1ds dotShape color: Color red.
+	cluster1ds
+		points: cluster1;
+		x: #x;
+		y: #y.
+	cluster2ds := RTData new.
+	cluster2ds dotShape color: Color blue.
+	cluster2ds
+		points: cluster2;
+		x: #x;
+		y: #y.
+	cluster3ds := RTData new.
+	cluster3ds dotShape color: Color green.
+	cluster3ds
+		points: cluster3;
+		x: #x;
+		y: #y.
+	centroids := RTData new
+		points:
+			{centroid1.
+			centroid2.
+			centroid3};
+		x: #x;
+		y: #y.
+	centroids dotShape rectangle color: Color black.
+	centroids dotShape size: 8.
+	RTGrapher new
+		add: cluster1ds;
+		add: cluster2ds;
+		add: cluster3ds;
+		add: centroids;
+		extent: 500 @ 500;
+		"maxX: 5; maxY: 5;"
+			build;
+		view ].
+	(1 to: 100)
+		do: [ :i | 
+			kmeans
+				value: randomPoint value
+				value: randomPoint value
+				value: randomPoint value ]
+		displayingProgress: [ :i | i asString , '/100' ].
+	^ kmeans
+		value: cluster1 average
+		value: cluster2 average
+		value: cluster3 average
+]
+
+{ #category : #examples }
 MiscVisualizations >> pascal [
 	<gtExample>
 	| b p |

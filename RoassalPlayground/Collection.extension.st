@@ -13,7 +13,7 @@ Collection >> arg: aSelector function: aBlockClosure opt: sortBlock [
 
 { #category : #'*RoassalPlayground' }
 Collection >> arg: aSelector function: aBlockClosure using: heap [
-	| tuples  progress |
+	| tuples progress |
 	progress := 0.
 	tuples := [ :job | 
 	self
@@ -35,7 +35,7 @@ Collection >> arg: aSelector function: aBlockClosure using: heap [
 			perc := (progress / tuples size) asFloat.
 			job
 				progress: perc;
-				title: 'Ranking tuples (' , perc printString , '%)'.
+				title: 'Ranking tuples (' , (perc * 100) printString , '%)'.
 			v ifNotNil: [ heap add: tuple -> v ] ] ] asJob run.
 	^ heap
 ]

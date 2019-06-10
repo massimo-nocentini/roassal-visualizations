@@ -44,19 +44,6 @@ Population >> features [
 	^ subjects first keys \ {#id . response}
 ]
 
-{ #category : #move }
-Population >> grow [
-	self growUsingFeatures: self features
-	
-]
-
-{ #category : #'as yet unclassified' }
-Population >> growUsingFeatures: aCollection [
-
-self announce: (GrowEvent new features: aCollection ; yourself)
-	
-]
-
 { #category : #'as yet unclassified' }
 Population >> growerOnHeap: heap usingWeight: weightBlock [
 	[ (heap removeFirst key

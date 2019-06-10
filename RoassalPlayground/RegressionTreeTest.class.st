@@ -174,12 +174,9 @@ RegressionTreeTest >> pruneEventHandler: ev withElement: anElement [
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> registerEventHandlersForElement: anElement [
-
 	anElement model
 		when: SplitEvent
 			do: [ :ev | self splitEventHandler: ev withElement: anElement ];
-		when: GrowEvent
-			do: [ :ev | self growEventHandler: ev withElement: anElement ];
 		when: PruneEvent
 			do: [ :ev | self pruneEventHandler: ev withElement: anElement ];
 		when: SelectEvent

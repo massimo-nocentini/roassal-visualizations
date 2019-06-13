@@ -4,6 +4,7 @@ Class {
 	#instVars : [
 		'predicate',
 		'collector',
+		'selector',
 		'result'
 	],
 	#category : #'RoassalPlayground-RegressionTrees'
@@ -37,4 +38,14 @@ SelectEvent >> result [
 { #category : #accessing }
 SelectEvent >> result: aValue [ 
 	result := aValue
+]
+
+{ #category : #accessing }
+SelectEvent >> selector [
+	^ selector
+]
+
+{ #category : #accessing }
+SelectEvent >> selector: aBlockOrSymbol [
+	selector := aBlockOrSymbol
 ]

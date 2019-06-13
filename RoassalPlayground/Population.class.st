@@ -170,12 +170,12 @@ Population >> subjects: aCollection [
 
 { #category : #announcing }
 Population >> subtreeSelect: aPredicate then: aCollector [
-	^self
+	^ self
 		announce:
 			(SelectEvent new
 				predicate: aPredicate;
 				collector: aCollector;
-				yourself)
+				selector: #model; yourself)
 ]
 
 { #category : #'as yet unclassified' }

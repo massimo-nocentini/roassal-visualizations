@@ -142,10 +142,13 @@ RegressionTreeTest >> makePopulationWith: populationSize [
 			at: #x1 put: rand next;
 			at: #x2 put: rand next;
 			at: #x3 put: rand next;
-			at: #y put: rand next;
 			yourself.
+		subject at: #y put: (subject at: #x0) + rand next.
 		subjects add: subject ].
-	^ Population new subjects: subjects; response: #y; yourself
+	^ Population new
+		subjects: subjects;
+		response: #y;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }
@@ -178,7 +181,7 @@ RegressionTreeTest >> selectEventHandler: ev withElement: anElement [
 	| elements |
 	elements := anElement subtreeElements
 		select: ev predicate
-		thenCollect: #model.
+		thenCollect: ev selector.
 	ev result: (ev collector value: elements)
 ]
 

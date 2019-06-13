@@ -26,6 +26,11 @@ RTElement >> isLeaf [
 ]
 
 { #category : #'*RoassalPlayground' }
+RTElement >> isRootElement [
+	^ self parentElement isNil 
+]
+
+{ #category : #'*RoassalPlayground' }
 RTElement >> leafElements [
 	^ self childrenElements
 		ifEmpty: [ Array with: self ]

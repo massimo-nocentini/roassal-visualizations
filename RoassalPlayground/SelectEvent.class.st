@@ -6,7 +6,7 @@ Class {
 		'collector',
 		'result'
 	],
-	#category : #RoassalPlayground
+	#category : #'RoassalPlayground-RegressionTrees'
 }
 
 { #category : #accessing }

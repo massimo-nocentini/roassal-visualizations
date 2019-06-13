@@ -8,13 +8,13 @@ Class {
 	#classInstVars : [
 		'subjects'
 	],
-	#category : #RoassalPlayground
+	#category : #'RoassalPlayground-RegressionTrees'
 }
 
 { #category : #accessing }
 Population >> RSS: aFeature [
 	|avg|
-	avg := self mean:aFeature .
+	avg := self meanOf:aFeature .
 	^ ((self collectFeature: aFeature) collect:[:each | (each - avg) ** 2]) sum
 ]
 
@@ -46,21 +46,22 @@ Population >> features [
 
 { #category : #'as yet unclassified' }
 Population >> growerOnHeap: heap usingWeight: weightBlock [
-	[ (heap removeFirst key
+	[ heap isNotEmpty and: [(heap removeFirst key
 		unpackOnBlock: [ :f :v :p | 
 			"discard its ranking which is the response of #value"
 			(p at: #exploredDuringGrow)
 				ifTrue: [ true	"keep removing elements" ]
-				ifFalse: [ 
-					p at: #exploredDuringGrow put: true.
-					
-					(p at: #model) splitFeature: f at: v thenArgMin: weightBlock usingHeap: heap.
-					.
-					false ] ]) and: [ heap isNotEmpty ] ] whileTrue
+				ifFalse: [ p at: #exploredDuringGrow put: true.
+					(p at: #model)
+						splitFeature: f
+						at: v
+						thenArgMin: weightBlock
+						usingHeap: heap.
+					false ] ])  ] ] whileTrue
 ]
 
 { #category : #accessing }
-Population >> mean: aFeature [
+Population >> meanOf: aFeature [
  ^ (self collectFeature: aFeature) average
 ]
 
@@ -94,11 +95,13 @@ Population >> response: aString [
 ]
 
 { #category : #accessing }
+Population >> responseMean [
+	^ self meanOf: response
+]
+
+{ #category : #accessing }
 Population >> responseRSS [
-	| avg |
-	avg := self mean: response.
-	^ ((self collectFeature: response)
-		collect: [ :each | (each - avg) ** 2 ]) sum
+	^ self RSS: response
 ]
 
 { #category : #moves }

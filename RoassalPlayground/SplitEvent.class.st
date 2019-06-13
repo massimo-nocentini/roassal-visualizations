@@ -7,7 +7,7 @@ Class {
 		'feature',
 		'at'
 	],
-	#category : #RoassalPlayground
+	#category : #'RoassalPlayground-RegressionTrees'
 }
 
 { #category : #accessing }

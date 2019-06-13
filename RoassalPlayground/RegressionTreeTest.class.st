@@ -4,7 +4,7 @@ I collect tests and Roassal visualizations about __Regression Trees__.
 Class {
 	#name : #RegressionTreeTest,
 	#superclass : #TestCase,
-	#category : #RoassalPlayground
+	#category : #'RoassalPlayground-RegressionTrees'
 }
 
 { #category : #'as yet unclassified' }
@@ -74,18 +74,17 @@ RegressionTreeTest >> addInteractionsToElement: anElement withPopupDescriptor: a
 
 { #category : #'as yet unclassified' }
 RegressionTreeTest >> describeModelOfElement: anElement [
-	| aPopulation percentage SRSS|
+	| aPopulation percentage SRSS |
 	aPopulation := anElement model.
 	percentage := aPopulation subjects size
 		/ anElement rootElement model subjects size * 100.
-		
 	SRSS := (anElement leafElements
-		collect: [ :each | each model RSS: #y ]) sum.
-		
+		collect: [ :each | each model responseRSS ]) sum.
 	^ 'subjects: ' , aPopulation subjects size asString , ' ('
 		, percentage asFloat asString , '%)' , String cr , 'mean: '
-		, (aPopulation mean: #y) asString , String cr , 'RSS: '
-		, (aPopulation RSS: #y) asString , String cr , 'SRSS: ' , SRSS asString
+		, aPopulation responseMean asString , String cr , 'RSS: '
+		, aPopulation responseRSS asString , String cr , 'SRSS: '
+		, SRSS asString
 ]
 
 { #category : #'as yet unclassified' }
@@ -113,16 +112,6 @@ RegressionTreeTest >> describeModelOfElement: anElement afterSplitEvent: ev [
 RegressionTreeTest >> edgeBuilder [
 	^ RTEdgeBuilder new shape
 		color: Color black;orthoVerticalLine
-]
-
-{ #category : #'as yet unclassified' }
-RegressionTreeTest >> growEventHandler: ev withElement: anElement [
-	| aLeafElement aFeature aSplitValue |
-	aLeafElement := anElement leafElements atRandom.
-	aFeature := ev features atRandom.
-	aSplitValue := (aLeafElement model collectFeature: aFeature)
-		atRandomBounded.
-	aLeafElement model splitFeature: aFeature at: aSplitValue
 ]
 
 { #category : #'as yet unclassified' }
@@ -162,7 +151,7 @@ RegressionTreeTest >> makePopulationWith: populationSize [
 RegressionTreeTest >> normalizerOnElements: elements [
 	^ RTMetricNormalizer new
 		elements: elements;
-			normalizeHeight: [ :aPopulation | aPopulation RSS: #y ];
+		normalizeHeight: #responseRSS;
 		yourself
 ]
 
@@ -197,7 +186,7 @@ RegressionTreeTest >> shapeBuilder [
 	| color |
 	color := RTMultiLinearColor new
 		colors: RTPalette c4;
-		command: [ :each | each mean: #y ];
+		command: #responseMean;
 		yourself.
 	^ RTBox new
 		width: [ :aPopulation | aPopulation subjects size ];

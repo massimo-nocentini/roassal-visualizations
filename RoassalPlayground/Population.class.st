@@ -140,12 +140,22 @@ Population >> splitFeature: aString at: aNumber with: aReceiver [
 	noSat := LinkedList new.
 	subjects
 		do: [ :each | 
-			(each at: aString) < aNumber
-				ifTrue: [ sat add: each ]
-				ifFalse: [ noSat add: each ] ].
+			| population |
+			population := (each at: aString) < aNumber
+				ifTrue: [ sat ]
+				ifFalse: [ noSat ]. population
+				add: each ].
 	^ aReceiver
-		value: (Population new response: response; subjects: sat; yourself)
-		value: (Population new response: response; subjects:  noSat; yourself)
+		value:
+			(Population new
+				response: response;
+				subjects: sat;
+				yourself)
+		value:
+			(Population new
+				response: response;
+				subjects: noSat;
+				yourself)
 ]
 
 { #category : #accessing }

@@ -98,14 +98,15 @@ RegressionTreeTest >> describeModelOfElement: anElement afterSplitEvent: ev [
 					s
 						nextPutAll: String tab;
 						nextPutAll: v start asString;
-						nextPutAll: ' < ';
-						nextPutAll: k asString;
 						nextPutAll: ' <= ';
+						nextPutAll: k asString;
+						nextPutAll: ' < ';
 						nextPutAll: v stop asString;
 						nextPutAll: String cr;
 						yourself ] ].
-	^ 'Split of ' , ev feature asString , ' at ' , ev at asString ,  ', bounds:'
-		, String cr , boundsRepr , (self describeModelOfElement: anElement)
+	^ 'Split of ' , ev feature asString , ' at ' , ev at asString
+		, ', bounds:' , String cr , boundsRepr
+		, (self describeModelOfElement: anElement)
 ]
 
 { #category : #'as yet unclassified' }

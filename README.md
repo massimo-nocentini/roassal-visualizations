@@ -51,6 +51,14 @@ population and (ii) its height is proportial to the Residual Sum of Squares wrt 
 
 ## Fractals
 
+The following visualizations can be reproduced after evaluating the following snippet in a `Workspace`:
+```smalltalk
+Gofer it
+  squeaksource: 'PharoNonCorePackages';
+  package: 'BitBltPen';
+  load.
+```
+
 ### A ternary tree
 Taken from https://ericclack.blogspot.com/2014/03/smalltalk-fractal-trees.html and generated using `BitBltPen` objects:
 ![Fractal tree](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fractal-tree.png)

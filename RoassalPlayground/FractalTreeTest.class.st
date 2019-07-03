@@ -2,6 +2,13 @@
 I represent a container for a fractal tree visualization.
 
 Take care of clicking on the canvas if the methods are ran via the TestRunner green button on their left, otherwise the Display objects will free and the *only* rescue procedure is to kill the image process and restart it, loosing unsaved changes.
+
+In order to reproduce my visualizations, the following snippet should be executed first: 
+
+Gofer it
+  squeaksource: 'PharoNonCorePackages';
+  package: 'BitBltPen';
+  load.
 "
 Class {
 	#name : #FractalTreeTest,

@@ -10,7 +10,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-FractalTreeTest >> testBadDraw [
+FractalTreeTest >> testFractalTreeDrawing [
+	"The following drawing has been reproduced from:
+	https://ericclack.blogspot.com/2014/03/smalltalk-fractal-trees.html"
+	Display
+		restoreAfter: [ Display fillWhite.
+			self tree: 700 @ 700 length: 200 angle: 0 ]
+]
+
+{ #category : #'as yet unclassified' }
+FractalTreeTest >> testSimpleLineWithLabelDrawing [
 	Display
 		restoreAfter: [ | myPen |
 			Display fillWhite.
@@ -31,13 +40,6 @@ FractalTreeTest >> testBadDraw [
 			Display extent.	"get display width@height"
 			Display width.	"get display width"
 			Display height	"get display height" ]
-]
-
-{ #category : #'as yet unclassified' }
-FractalTreeTest >> testDraw [
-Display
-		restoreAfter: [ Display fillWhite.
-			self tree: 700 @ 700 length: 200 angle: 0 ]
 ]
 
 { #category : #'as yet unclassified' }

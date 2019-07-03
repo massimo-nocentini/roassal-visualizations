@@ -38,15 +38,19 @@ population and (ii) its height is proportial to the Residual Sum of Squares wrt 
 ## Combinatorial visualizations
 
 ### Parity of Fibonacci numbers [A000045](https://oeis.org/A000045)
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fibonacci.svg)
+![parity of Fibonacci numbers](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fibonacci.svg)
 
 ### Parity of the Pascal triangle [A007318](https://oeis.org/A007318)
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/pascal.svg)
+![Parity of the Pascal triangle](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/pascal.svg)
 
 ### Parity of the Catalan triangle [A009766](https://oeis.org/A009766)
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/catalan.svg)
+![Parity of the Catalan triangle](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/catalan.svg)
 
 ### Parity of the Stirling (II kind) triangle [A008277](https://oeis.org/A008277)
-![expandeable filetree viz](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/stirlingII.svg)
+![Parity of the Stirling (II kind) triangle](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/stirlingII.svg)
 
+## Fractals
 
+### A ternary tree
+Taken from https://ericclack.blogspot.com/2014/03/smalltalk-fractal-trees.html and generated using `BitBltPen` objects:
+![Fractal tree](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fractal-tree.png)

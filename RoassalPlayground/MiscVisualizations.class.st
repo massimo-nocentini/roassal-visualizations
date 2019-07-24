@@ -352,3 +352,73 @@ MiscVisualizations >> tempFilePath [
 	b layout horizontalTree.
 	^ b
 ]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzKoch [
+	<gtExample>
+	^ WertzKoch new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSeashell [
+	<gtExample>
+	^ WertzSeashell new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSeashellElegant [
+	<gtExample>
+	^ WertzSeashellElegant new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSeashellVaryingAngle [
+	<gtExample>
+	^ WertzSeashellVaryingAngle  new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSierpinski [
+	<gtExample>
+	^ WertzSierpinski  new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSierpinskiCurve [
+	<gtExample>
+	^ WertzSierpinskiCurve new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzSpiral [
+	<gtExample>
+	^ WertzSpiral new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzTree1 [
+	<gtExample>
+	^ WertzTree1 new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzTree2 [
+	<gtExample>
+	^ WertzTree2 new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzTree3 [
+	<gtExample>
+	^ WertzTree3 new
+		times: 8;
+		angleLeft: 20;
+		angleRight: 29;
+		view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzTree3_bis [
+	<gtExample>
+	^ WertzTree3 new times: 7;angleLeft: 20; angleRight: -25;view
+]

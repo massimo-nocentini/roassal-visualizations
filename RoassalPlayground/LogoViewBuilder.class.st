@@ -11,15 +11,14 @@ self subclassResponsibility
 
 { #category : #'as yet unclassified' }
 LogoViewBuilder >> view [
-	| v |
+	| v eb |
 	v := RTView new.
 	v @ RTDraggableView.
-	self
-		onView: v
-		withPen:
-			(RTPenEdgeBuilder new
-				view: v;
-				yourself).
+	eb := RTPenEdgeBuilder new
+		view: v;
+		yourself.
+	eb shape line color: (Color black alpha: 0.5).
+	self onView: v withPen: eb.
 	v elements do: [ :each | each translateTo: each model ].
 	^ v
 ]

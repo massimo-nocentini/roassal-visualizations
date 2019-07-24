@@ -62,3 +62,18 @@ Gofer it
 ### A ternary tree
 Taken from https://ericclack.blogspot.com/2014/03/smalltalk-fractal-trees.html and generated using `BitBltPen` objects:
 ![Fractal tree](https://github.com/massimo-nocentini/roassal-visualizations/blob/master/fractal-tree.png)
+
+### From Wertz's book
+In his book https://www.elsevier.com/books/object-oriented-programming-with-smalltalk/wertz/978-1-78548-016-4, Wertz proposes lots of interesting fractal structures, drawing them using `BitBltPen` objects. Here we reproduce those fractals using Roassal objects (this effort lies on the subclass `RTPenEdgeBuilder` that understand a turtle commands):
+
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/spiral.svg" width="300">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/seashell.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/seashell-elegant.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/seashell-varying-angle.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/koch.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/sierpinski.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/sierpinski-curve.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/tree2.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/tree3.svg" width="600">
+<img src="https://github.com/massimo-nocentini/roassal-visualizations/blob/master/tree3_bis.svg" width="600">
+

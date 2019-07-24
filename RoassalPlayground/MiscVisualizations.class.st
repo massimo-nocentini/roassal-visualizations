@@ -360,6 +360,12 @@ MiscVisualizations >> testWertzKoch [
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzPolygon [
+	<gtExample>
+	^ WertzPolygon new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzSeashell [
 	<gtExample>
 	^ WertzSeashell new view

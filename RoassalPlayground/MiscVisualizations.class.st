@@ -360,6 +360,24 @@ MiscVisualizations >> testWertzKoch [
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzLindenmayer [
+	<gtExample>
+	^ WertzLindenmayer  new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerGosper [
+	<gtExample>
+	^ WertzLindenmayerGosper new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerSierpinski [
+	<gtExample>
+	^ WertzLindenmayerSierpinski  new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzPolygon [
 	<gtExample>
 	^ WertzPolygon new view

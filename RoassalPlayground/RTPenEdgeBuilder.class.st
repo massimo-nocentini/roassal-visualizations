@@ -20,6 +20,12 @@ RTPenEdgeBuilder >> direction [
 ]
 
 { #category : #heads }
+RTPenEdgeBuilder >> direction: aDirection [
+
+	 direction:=aDirection 
+]
+
+{ #category : #heads }
 RTPenEdgeBuilder >> down [
 	"Set the state of the receiver's pen to down (drawing)."
 
@@ -81,6 +87,11 @@ RTPenEdgeBuilder >> initialize [
 		size: 1;
 		yourself.
 		vertices := Set new.
+]
+
+{ #category : #heads }
+RTPenEdgeBuilder >> isDown [
+	^ penDown 
 ]
 
 { #category : #heads }

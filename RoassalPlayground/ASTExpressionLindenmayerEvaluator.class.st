@@ -48,7 +48,7 @@ ASTExpressionLindenmayerEvaluator >> initialize [
 ]
 
 { #category : #'as yet unclassified' }
-ASTExpressionLindenmayerEvaluator >> interpretAxiom: anAxiom [ 
+ASTExpressionLindenmayerEvaluator >> interpretAxiom: anAxiom [
 	self automate: (self replace: anAxiom times: level)
 ]
 

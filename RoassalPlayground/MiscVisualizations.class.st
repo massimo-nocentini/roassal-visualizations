@@ -366,9 +366,21 @@ MiscVisualizations >> testWertzLindenmayer [
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzLindenmayerAlgae [
+	<gtExample>
+	^ WertzLindenmayerAlgae new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzLindenmayerBracketedAnotherShrub [
 	<gtExample>
 	^ WertzLindenmayerBracketedAnotherShrub new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerBracketedBinaryTree [
+	<gtExample>
+	^ WertzLindenmayerBracketedBinaryTree new view
 ]
 
 { #category : #examples }
@@ -378,15 +390,33 @@ MiscVisualizations >> testWertzLindenmayerBracketedGrass [
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzLindenmayerBracketedPlant [
+	<gtExample>
+	^ WertzLindenmayerBracketedPlant new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzLindenmayerBracketedShrub [
 	<gtExample>
 	^ WertzLindenmayerBracketedShrub  new view
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzLindenmayerDragon [
+	<gtExample>
+	^ WertzLindenmayerDragon new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzLindenmayerGosper [
 	<gtExample>
 	^ WertzLindenmayerGosper new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerKoch [
+	<gtExample>
+	^ WertzLindenmayerKoch new view
 ]
 
 { #category : #examples }

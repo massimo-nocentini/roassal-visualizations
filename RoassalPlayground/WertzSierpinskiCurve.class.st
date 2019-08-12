@@ -28,7 +28,7 @@ times > 0
 { #category : #'as yet unclassified' }
 WertzSierpinskiCurve >> times: times line: long pen: pen [
 	pen
-		place:
+		location:
 			(times odd
 				ifTrue: [ 290 ]
 				ifFalse: [ 10 ]) @ 290.

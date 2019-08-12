@@ -10,7 +10,7 @@ WertzKoch >> onView: v withPen: pen [
 	long := 280.
 	pen
 		north;
-		place: 10 @ (long / 2 - 5);
+		location: 10 @ (long / 2 - 5);
 		turn: 90;
 		down.
 	self times: 4 koch: long pen: pen

@@ -18,7 +18,7 @@ ASTExpressionLindenmayerBracketedEvaluator >> initialize [
 { #category : #'API-remotes' }
 ASTExpressionLindenmayerBracketedEvaluator >> pop [
         pen
-           place: stack pop;
+           location: stack pop;
            direction: stack pop.
             stack pop ifTrue: [ pen down ] ifFalse: [ pen up ]
 ]

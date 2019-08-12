@@ -366,6 +366,24 @@ MiscVisualizations >> testWertzLindenmayer [
 ]
 
 { #category : #examples }
+MiscVisualizations >> testWertzLindenmayerBracketedAnotherShrub [
+	<gtExample>
+	^ WertzLindenmayerBracketedAnotherShrub new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerBracketedGrass [
+	<gtExample>
+	^ WertzLindenmayerBracketedGrass new view
+]
+
+{ #category : #examples }
+MiscVisualizations >> testWertzLindenmayerBracketedShrub [
+	<gtExample>
+	^ WertzLindenmayerBracketedShrub  new view
+]
+
+{ #category : #examples }
 MiscVisualizations >> testWertzLindenmayerGosper [
 	<gtExample>
 	^ WertzLindenmayerGosper new view

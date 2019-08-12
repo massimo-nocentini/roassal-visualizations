@@ -6,10 +6,19 @@ Class {
 		'direction',
 		'penDown',
 		'vertices',
-		'vertexShape'
+		'vertexShape',
+		'edges'
 	],
 	#category : #RoassalPlayground
 }
+
+{ #category : #heads }
+RTPenEdgeBuilder >> buildOnView: v withShape: shape [
+	v addAll: (shape elementsOn: vertices).
+	v elements do: [ :each | each translateTo: each model ].
+	self useAssociations: edges.
+"	edges do: [ :assoc | self connectFrom: assoc key to: assoc value ]"
+]
 
 { #category : #heads }
 RTPenEdgeBuilder >> direction [
@@ -49,27 +58,17 @@ RTPenEdgeBuilder >> goto: aPoint [
 	form source as the shape of the drawing brush. The receiver's set 
 	direction does not change."
 
-	| old from to|
+	| old from to |
 	old := location.
 	location := aPoint.
 	penDown
-		ifFalse:[^self].
-			
-			from := old rounded.
-			to := location rounded.
-			(vertices includes: from)
-				ifFalse: [ vertices add: from.
-					view add: (vertexShape elementOn: from) ].
-			(vertices includes: to)
-				ifFalse: [ vertices add: to.
-					view add: (vertexShape elementOn: to) ].
-			view addEdge: (self connectFrom: from to: to) 
-			
-		 "NOTE:  This should be changed so it does NOT draw the first point, so as
-	not to overstrike at line junctions.  At the same time, place should draw
-	a single dot if the pen is down, as should down (put-pen-down) if it
-	was not down before."
-			
+		ifFalse: [ ^ self ].
+	from := old rounded.
+	to := location rounded.
+	vertices
+		add: from;
+		add: to.
+	edges add: from -> to
 ]
 
 { #category : #heads }
@@ -86,7 +85,8 @@ RTPenEdgeBuilder >> initialize [
 	vertexShape := RTEllipse new
 		size: 1;
 		yourself.
-		vertices := Set new.
+	vertices := Set new.
+	edges := Set new.
 ]
 
 { #category : #heads }
@@ -102,17 +102,17 @@ RTPenEdgeBuilder >> location [
 ]
 
 { #category : #heads }
+RTPenEdgeBuilder >> location: aPoint [
+	"Set the receiver at position aPoint. No lines are drawn."
+
+	location := aPoint
+]
+
+{ #category : #heads }
 RTPenEdgeBuilder >> north [
 	"Set the receiver's direction to facing toward the top of the display screen."
 
 	direction := 270
-]
-
-{ #category : #heads }
-RTPenEdgeBuilder >> place: aPoint [
-	"Set the receiver at position aPoint. No lines are drawn."
-
-	location := aPoint
 ]
 
 { #category : #heads }

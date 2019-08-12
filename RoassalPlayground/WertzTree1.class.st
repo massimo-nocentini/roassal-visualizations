@@ -17,7 +17,7 @@ WertzTree1 >> tree1: length times: n pen: pen [
 	pen north;
 		home;
 		down.
-	pen place: 75 @ 130.
+	pen location: 75 @ 130.
 	self tree1a: length pen: pen times: n
 ]
 

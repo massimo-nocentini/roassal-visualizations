@@ -17,8 +17,8 @@ LogoViewBuilder >> view [
 	eb := RTPenEdgeBuilder new
 		view: v;
 		yourself.
-	eb shape line color: (Color black alpha: 0.5).
+	eb shape line color: (Color black alpha: 1 / 2).
 	self onView: v withPen: eb.
-	v elements do: [ :each | each translateTo: each model ].
+	eb buildOnView: v withShape: (RTEllipse new size:1 ; yourself).
 	^ v
 ]

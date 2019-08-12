@@ -8,7 +8,7 @@ Class {
 WertzSierpinski >> onView: v withPen: pen [
 	pen
 		north;
-		place: 20 @ 290;
+		location: 20 @ 290;
 		down.
 	self sierp: 60 pen: pen
 ]

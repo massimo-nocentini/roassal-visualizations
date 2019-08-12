@@ -9,7 +9,7 @@ WertzSeashell >> onView: v withPen: pen [
 	| dist |
 	pen
 		north;
-		place: 60 @ 90;
+		location: 60 @ 90;
 		down.
 	dist := 1.2.
 	200

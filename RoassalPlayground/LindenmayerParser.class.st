@@ -6,7 +6,7 @@ Class {
 
 { #category : #'generated-accessing' }
 LindenmayerParser class >> cacheId [
-	^'2019-08-11T18:17:56.629058+02:00'
+	^'2019-08-12T09:42:05.151181+02:00'
 ]
 
 { #category : #generated }
@@ -26,7 +26,7 @@ LindenmayerParser class >> definitionComment [
         | <letter> 'left' "" -> "" Axiom 'right' {{Binary}}
         ;
       Axiom
-        : (<letter> | ""+"" | ""-"") + 'axiom' {{Axiom}}
+        : (<letter> | ""+"" | ""-"" | ""["" | ""]"") + 'axiom' {{Axiom}}
         ;"
 ]
 
@@ -97,17 +97,17 @@ LindenmayerParser >> reduceActionFor__Rule__rule_______2: nodes [
 ]
 
 { #category : #'generated-reduction actions' }
-LindenmayerParser >> reduceActionFor___letter__________3: nodes [
+LindenmayerParser >> reduceActionFor___letter__________________2: nodes [
 	^ nodes at: 1
 ]
 
 { #category : #'generated-reduction actions' }
-LindenmayerParser >> reduceActionFor___letter___________1: nodes [
+LindenmayerParser >> reduceActionFor___letter___________________1: nodes [
 	^ OrderedCollection with: (nodes at: 1)
 ]
 
 { #category : #'generated-reduction actions' }
-LindenmayerParser >> reduceActionFor___letter___________2: nodes [
+LindenmayerParser >> reduceActionFor___letter___________________2: nodes [
 	^ (nodes at: 1)
 		add: (nodes at: 2);
 		yourself
@@ -116,48 +116,50 @@ LindenmayerParser >> reduceActionFor___letter___________2: nodes [
 { #category : #generated }
 LindenmayerParser >> reduceTable [
 ^#(
-	#(12 1 #reduceActionFor___letter__________3:) 
-	#(16 1 #reduceActionForExpression1:) 
-	#(7 1 #reduceActionFor__Rule__rule_______1:) 
-	#(11 1 #reduceActionFor___letter__________3:) 
-	#(13 1 #reduceActionFor___letter___________1:) 
-	#(10 1 #reduceActionForAxiom1:) 
-	#(7 2 #reduceActionFor__Rule__rule_______2:) 
-	#(8 2 #reduceActionFor__Rule__rule______1:) 
-	#(13 2 #reduceActionFor___letter___________2:) 
-	#(11 3 #reduceActionForRule2:)
+	#(14 1 #reduceActionFor___letter__________________2:) 
+	#(18 1 #reduceActionFor__Rule__rule_______1:) 
+	#(13 1 #reduceActionFor___letter__________________2:) 
+	#(15 1 #reduceActionFor___letter___________________1:) 
+	#(12 1 #reduceActionForAxiom1:) 
+	#(10 1 #reduceActionForExpression1:) 
+	#(9 2 #reduceActionFor__Rule__rule______1:) 
+	#(15 2 #reduceActionFor___letter___________________2:) 
+	#(18 2 #reduceActionFor__Rule__rule_______2:) 
+	#(13 3 #reduceActionForRule2:)
 	).
 ]
 
 { #category : #generated }
 LindenmayerParser >> symbolNames [
-	^ #('"."' '" -> "' '"-"' '"+"' '<letter>' '<whitespace>' '( Rule ''rule'' ".")+' '( Rule ''rule'' ".")' 'B e g i n' 'Axiom' 'Rule' '( <letter> "+" "-")' '( <letter> "+" "-")+' 'E O F' 'error' 'Expression')
+	^ #('"."' '" -> "' '"+"' '"]"' '"["' '"-"' '<letter>' '<whitespace>' '( Rule ''rule'' ".")' 'Expression' 'B e g i n' 'Axiom' 'Rule' '( <letter> "+" "-" "[" "]")' '( <letter> "+" "-" "[" "]")+' 'E O F' 'error' '( Rule ''rule'' ".")+')
 ]
 
 { #category : #generated }
 LindenmayerParser >> symbolTypes [
-	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #OrderedCollection #OrderedCollection #ASTExpressionLindenmayerNode #ASTAxiomLindenmayerNode #ASTExpressionLindenmayerNode #SmaCCToken #Object #SmaCCToken #SmaCCToken #ASTExpressionLindenmayerNode)
+	^ #(#SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #SmaCCToken #OrderedCollection #ASTExpressionLindenmayerNode #ASTExpressionLindenmayerNode #ASTAxiomLindenmayerNode #ASTExpressionLindenmayerNode #SmaCCToken #Object #SmaCCToken #SmaCCToken #OrderedCollection)
 ]
 
 { #category : #generated }
 LindenmayerParser >> transitionTable [
 ^#(
-#[1 0 9 0 3 0 13 0 4 0 17 0 5 0 21 0 7 0 25 0 8 0 29 0 10 0 33 0 11 0 37 0 12 0 41 0 13 0 45 0 16] 
-#[0 0 6 0 1 0 3 0 4 0 5] 
-#[0 0 6 0 1 0 3 0 4 0 5] 
-#[1 0 6 0 1 0 49 0 2 0 6 0 3 0 6 0 4 0 6 0 5] 
-#[1 0 9 0 3 0 13 0 4 0 17 0 5 0 53 0 8 0 29 0 10 0 33 0 11 0 37 0 12 0 41 0 13 0 10 0 14] 
-#[0 0 14 0 3 0 4 0 5 0 14] 
-#[0 0 18 0 1] 
-#[0 0 57 0 1] 
-#[0 0 22 0 1 0 3 0 4 0 5] 
-#[1 0 26 0 1 0 9 0 3 0 13 0 4 0 61 0 5 0 65 0 12] 
-#[0 0 0 0 14] 
-#[1 0 9 0 3 0 13 0 4 0 61 0 5 0 69 0 10 0 37 0 12 0 41 0 13] 
-#[0 0 30 0 3 0 4 0 5 0 14] 
-#[0 0 34 0 3 0 4 0 5 0 14] 
-#[0 0 6 0 1 0 3 0 4 0 5] 
-#[0 0 38 0 1 0 3 0 4 0 5] 
+#[1 0 9 0 3 0 13 0 4 0 17 0 5 0 21 0 6 0 25 0 7 0 29 0 9 0 33 0 10 0 37 0 12 0 41 0 13 0 45 0 14 0 49 0 15 0 53 0 18] 
+#[0 0 6 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[0 0 6 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[0 0 6 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[0 0 6 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[1 0 6 0 1 0 57 0 2 0 6 0 3 0 6 0 4 0 6 0 5 0 6 0 6 0 6 0 7] 
+#[0 0 10 0 3 0 4 0 5 0 6 0 7 0 16] 
+#[0 0 0 0 16] 
+#[0 0 14 0 1] 
+#[0 0 61 0 1] 
+#[0 0 18 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[1 0 22 0 1 0 9 0 3 0 13 0 4 0 17 0 5 0 21 0 6 0 65 0 7 0 69 0 14] 
+#[1 0 9 0 3 0 13 0 4 0 17 0 5 0 21 0 6 0 25 0 7 0 73 0 9 0 37 0 12 0 41 0 13 0 45 0 14 0 49 0 15 0 26 0 16] 
+#[1 0 9 0 3 0 13 0 4 0 17 0 5 0 21 0 6 0 65 0 7 0 77 0 12 0 45 0 14 0 49 0 15] 
+#[0 0 30 0 3 0 4 0 5 0 6 0 7 0 16] 
+#[0 0 6 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[0 0 34 0 1 0 3 0 4 0 5 0 6 0 7] 
+#[0 0 38 0 3 0 4 0 5 0 6 0 7 0 16] 
 #[0 0 42 0 1]
 	).
 ]

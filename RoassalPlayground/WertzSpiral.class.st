@@ -8,7 +8,7 @@ Class {
 WertzSpiral >> onView: v withPen: pen [
 	pen
 		north;
-		place: 0@0;
+		location: 0@0;
 		down.
 	1 to: 50 do: [ :i | 
 		pen

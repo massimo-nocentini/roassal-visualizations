@@ -42,7 +42,7 @@ FractalTreeTest >> testSimpleLineWithLabelDrawing [
 			myPen go: 50.	"move pen specified number of pixels"
 			myPen location.	"get the pen position"
 			myPen goto: 200 @ 200.	"move to specified point"
-			myPen place: 250 @ 250.	"move to specified point without drawing"
+			myPen location: 250 @ 250.	"move to specified point without drawing"
 			myPen print: 'Hello World' withFont: (TextStyle default fontAt: 1).
 			Display extent.	"get display width@height"
 			Display width.	"get display width"

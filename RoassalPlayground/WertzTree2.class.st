@@ -37,7 +37,7 @@ WertzTree2 >> tree2: length angle: angle times: times pen: pen [
 	pen north;
 		home;
 		down.
-	pen place: 85 @ 130.
+	pen location: 85 @ 130.
 	self
 		tree2a: length
 		angle: angle

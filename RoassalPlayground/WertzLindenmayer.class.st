@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 WertzLindenmayer >> axiom: anAxiom rules: spec angle: angle level: level length: length pen: pen [
 	| visitor |
-	visitor := ASTExpressionLindenmayerEvaluator new
+	visitor := self visitor
 		accept: (LindenmayerParser parse: spec);
 		yourself.
 	visitor
@@ -31,4 +31,9 @@ WertzLindenmayer >> onView: v withPen: pen [
 			length: 5
 			pen: pen
 	"		rules: 'F -> F-F++F-F.';"
+]
+
+{ #category : #'as yet unclassified' }
+WertzLindenmayer >> visitor [
+	^ ASTExpressionLindenmayerEvaluator new
 ]

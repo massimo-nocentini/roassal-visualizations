@@ -58,6 +58,7 @@ Gofer it
   package: 'BitBltPen';
   load.
 ```
+for the sake of being self-contained, we ship the `BitBltPen` package in this repository to be loaded from Iceberg directly.
 
 ### A ternary tree
 Taken from https://ericclack.blogspot.com/2014/03/smalltalk-fractal-trees.html and generated using `BitBltPen` objects:
